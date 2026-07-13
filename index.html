@@ -305,18 +305,7 @@ html, body {
     0 14px 28px -12px rgba(0, 166, 81, .22),
     0 4px 10px rgba(0, 0, 0, .05);
 }
-/* "推荐" tag — small badge inside the card, NOT the border itself.
-   The whole point of grey-border-normal is consistency. */
-.agent-card.featured .agent-badge {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--brand-ink);
-  background: var(--brand-soft);
-  padding: 3px 8px;
-  border-radius: 999px;
-  margin-bottom: 10px;
-}
+/* "推荐" badge removed — all cards now look identical. */
 
 /* ---------- Skills & Tools page ---------- */
 .page { transition: opacity .25s ease; }
@@ -584,7 +573,16 @@ html, body {
           mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01z'/></svg>") center/contain no-repeat;
 }
 .agent-desc { color: var(--muted); font-size: 13.5px; line-height: 1.55; margin-bottom: 14px; }
-.agent-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+/* Bottom row: tag cluster on the left, arrow button on the right.
+   align-items: center keeps the arrow vertically aligned with the tag row. */
+.agent-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: auto;
+}
+.agent-tags { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
 .agent-tag {
   font-size: 12px;
   padding: 4px 10px;
@@ -592,17 +590,48 @@ html, body {
   color: var(--muted);
   border-radius: 999px;
 }
-.agent-card.featured .agent-tag { background: var(--brand-soft); color: var(--brand-ink); }
+/* Arrow button: circle in resting state, expands into a capsule with
+   "立即体验" label on hover. Width animates; label fades in. */
 .agent-arrow {
-  position: absolute; right: 16px; bottom: 16px;
-  width: 26px; height: 26px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 26px;
+  padding: 0 9px;
   border: 1px solid var(--rule);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
+  border-radius: 999px;
   font-size: 11px; color: var(--muted);
-  transition: background .15s ease, color .15s ease, border-color .15s ease;
+  background: transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  transition:
+    background .2s ease,
+    color .2s ease,
+    border-color .2s ease,
+    width .2s ease,
+    padding .2s ease;
 }
-.agent-card:hover .agent-arrow { background: var(--ink); color: #fff; border-color: var(--ink); }
+.agent-arrow .arr-label {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-width .2s ease, opacity .2s ease, margin .2s ease;
+  margin-left: 0;
+}
+.agent-arrow .arr-icon { display: inline-block; transition: transform .2s ease; }
+.agent-card:hover .agent-arrow {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+  padding: 0 12px;
+}
+.agent-card:hover .agent-arrow .arr-label {
+  max-width: 80px;
+  opacity: 1;
+  margin-left: 6px;
+}
+.agent-card:hover .agent-arrow .arr-icon { transform: translateX(2px); }
 
 /* ---------- Welcome strip ---------- */
 .welcome {
@@ -737,7 +766,7 @@ html, body {
   <div class="agents">
 
     <!-- 1 · 知识助手 (featured) — 语义化插图：搜索框 + 答案气泡 -->
-    <div class="agent-card featured" onclick="void(0)">
+    <div class="agent-card" onclick="void(0)">
       <div class="agent-illu">
         <svg viewBox="0 0 400 168" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
           <!-- decorative green lines bg -->
@@ -774,15 +803,19 @@ html, body {
         </svg>
       </div>
       <div class="agent-body">
-        <span class="agent-badge">推荐</span>
-        <div class="agent-title">知识助手 <span class="star"></span></div>
+        <div class="agent-title">知识助手</div>
         <p class="agent-desc">基于企业知识库的智能问答助手。回答有出处，引用有页码，问错会自动反问澄清。</p>
-        <div class="agent-tags">
-          <span class="agent-tag">智能问答</span>
-          <span class="agent-tag">知识检索</span>
-          <span class="agent-tag">多轮对话</span>
+        <div class="agent-bottom">
+          <div class="agent-tags">
+            <span class="agent-tag">智能问答</span>
+            <span class="agent-tag">知识检索</span>
+            <span class="agent-tag">多轮对话</span>
+          </div>
+          <span class="agent-arrow">
+            <span class="arr-label">立即体验</span>
+            <span class="arr-icon">→</span>
+          </span>
         </div>
-        <span class="agent-arrow">→</span>
       </div>
     </div>
 
@@ -842,12 +875,17 @@ html, body {
       <div class="agent-body">
         <div class="agent-title">质量追因</div>
         <p class="agent-desc">质量问题分析与根因追溯。输入异常现象，自动在工单、检测、参数曲线里找共因。</p>
-        <div class="agent-tags">
-          <span class="agent-tag">问题分析</span>
-          <span class="agent-tag">因果追溯</span>
-          <span class="agent-tag">外部应用</span>
+        <div class="agent-bottom">
+          <div class="agent-tags">
+            <span class="agent-tag">问题分析</span>
+            <span class="agent-tag">因果追溯</span>
+            <span class="agent-tag">外部应用</span>
+          </div>
+          <span class="agent-arrow">
+            <span class="arr-label">立即体验</span>
+            <span class="arr-icon">→</span>
+          </span>
         </div>
-        <span class="agent-arrow">→</span>
       </div>
     </div>
 
@@ -922,12 +960,17 @@ html, body {
       <div class="agent-body">
         <div class="agent-title">智能会议系统</div>
         <p class="agent-desc">会议纪要、议题梳理与待办跟踪。会上专心讨论，会后结构化交付。</p>
-        <div class="agent-tags">
-          <span class="agent-tag">会议纪要</span>
-          <span class="agent-tag">待办跟踪</span>
-          <span class="agent-tag">摘要生成</span>
+        <div class="agent-bottom">
+          <div class="agent-tags">
+            <span class="agent-tag">会议纪要</span>
+            <span class="agent-tag">待办跟踪</span>
+            <span class="agent-tag">摘要生成</span>
+          </div>
+          <span class="agent-arrow">
+            <span class="arr-label">立即体验</span>
+            <span class="arr-icon">→</span>
+          </span>
         </div>
-        <span class="agent-arrow">→</span>
       </div>
     </div>
 
@@ -994,12 +1037,17 @@ html, body {
       <div class="agent-body">
         <div class="agent-title">工艺技术准备</div>
         <p class="agent-desc">工艺技术准备 API 集成入口。自动汇总变更、生成工艺包、同步到 MES。</p>
-        <div class="agent-tags">
-          <span class="agent-tag">工艺准备</span>
-          <span class="agent-tag">API 集成</span>
-          <span class="agent-tag">外部应用</span>
+        <div class="agent-bottom">
+          <div class="agent-tags">
+            <span class="agent-tag">工艺准备</span>
+            <span class="agent-tag">API 集成</span>
+            <span class="agent-tag">外部应用</span>
+          </div>
+          <span class="agent-arrow">
+            <span class="arr-label">立即体验</span>
+            <span class="arr-icon">→</span>
+          </span>
         </div>
-        <span class="agent-arrow">→</span>
       </div>
     </div>
 
@@ -1067,12 +1115,17 @@ html, body {
       <div class="agent-body">
         <div class="agent-title">智能合同审核</div>
         <p class="agent-desc">合同文件智能审核与风险识别。条款对照、风险标注、修改建议一站完成。</p>
-        <div class="agent-tags">
-          <span class="agent-tag">合同审核</span>
-          <span class="agent-tag">风险识别</span>
-          <span class="agent-tag">外部应用</span>
+        <div class="agent-bottom">
+          <div class="agent-tags">
+            <span class="agent-tag">合同审核</span>
+            <span class="agent-tag">风险识别</span>
+            <span class="agent-tag">外部应用</span>
+          </div>
+          <span class="agent-arrow">
+            <span class="arr-label">立即体验</span>
+            <span class="arr-icon">→</span>
+          </span>
         </div>
-        <span class="agent-arrow">→</span>
       </div>
     </div>
 
@@ -1087,10 +1140,15 @@ html, body {
       <div class="agent-body">
         <div class="agent-title" style="color: var(--muted);">即将到来</div>
         <p class="agent-desc">智能体协调员 · 自定义智能体 · 团队空间……更多角色正在路上。</p>
-        <div class="agent-tags">
-          <span class="agent-tag">敬请期待</span>
+        <div class="agent-bottom">
+          <div class="agent-tags">
+            <span class="agent-tag">敬请期待</span>
+          </div>
+          <span class="agent-arrow" style="border-color: var(--rule-soft);">
+            <span class="arr-label">敬请期待</span>
+            <span class="arr-icon">→</span>
+          </span>
         </div>
-        <span class="agent-arrow" style="border-color: var(--rule-soft);">→</span>
       </div>
     </div>
 
