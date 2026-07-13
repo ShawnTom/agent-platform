@@ -235,6 +235,21 @@ html, body {
   70% { box-shadow: 0 0 0 8px rgba(31,159,91,0); }
   100% { box-shadow: 0 0 0 0 rgba(31,159,91,0); }
 }
+/* AI typing cursor — a short horizontal dash that blinks. */
+@keyframes ai-blink {
+  0%, 49%   { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.ai-cursor {
+  display: inline-block;
+  width: 10px;
+  height: 2px;
+  margin-left: 3px;
+  background: var(--accent);
+  border-radius: 1px;
+  vertical-align: 3px;
+  animation: ai-blink 1.05s steps(1, end) infinite;
+}
 .hero h1 {
   font-family: 'InstrumentSans', sans-serif;
   font-weight: 700;
@@ -755,7 +770,7 @@ html, body {
   <!-- Soft top/bottom fade to merge with page background -->
   <div class="hero-fade" aria-hidden="true"></div>
 
-  <span class="hero-eyebrow"><span class="pulse"></span>5 位智能体 · 24/7 在线</span>
+  <span class="hero-eyebrow"><span class="pulse"></span>5 位智能体 · 24/7 在线<span class="ai-cursor" aria-hidden="true"></span></span>
 
   <h1>你的 AI 同事 <em>已经就位</em>。<br>把流程交出去，把判断留给自己。</h1>
   <p class="lede">从问答检索、质量追因到会议纪要、合同审核——每位智能体各司其职，开箱即用。告诉它要做什么，剩下由它完成。</p>
