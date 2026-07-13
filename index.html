@@ -547,20 +547,6 @@ html, body {
   cursor: pointer;
   overflow: hidden;
 }
-/* The left-edge accent bar (always present, lit on hover) */
-.agent-card::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0;
-  width: 4px; height: 100%;
-  background: var(--accent);
-  opacity: .25;
-  transition: opacity .2s ease, height .25s ease;
-  z-index: 2;
-}
-.agent-card:hover::before { opacity: 1; }
-/* "推荐" featured card: lit accent bar always */
-.agent-card.featured::before { opacity: 1; }
 
 /* ---------- Illustration header (replaces icon) ---------- */
 .agent-illu {
