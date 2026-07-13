@@ -288,55 +288,27 @@ html, body {
 /* ---------- Border glow (React Bits–style) ---------- */
 /* Each card uses a CSS conic-gradient that rotates to the pointer position,
    creating a moving spotlight on the border. No SVG path math needed. */
-.agent-card { position: relative; isolation: isolate; }
-
-.agent-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1.5px;
-  background: conic-gradient(
-    from calc(var(--glow-angle, 0deg) - 90deg),
-    transparent 0deg,
-    transparent 60deg,
-    #7bd0a3 75deg,
-    #2db371 90deg,
-    #1f9f5b 105deg,
-    #2db371 120deg,
-    #7bd0a3 135deg,
-    transparent 150deg,
-    transparent 360deg
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  opacity: 0;
-  transition: opacity .3s ease;
-  z-index: 4;
-  pointer-events: none;
+/* ---------- Border glow (simplified & reliable) ---------- */
+/* Normal state: clean grey border, no shadow.
+   Hover state: green border + soft green shadow + lift up. */
+.agent-card {
+  position: relative;
+  border: 1.5px solid #e5e3d8;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .02);
+  transition:
+    border-color .2s ease,
+    box-shadow .25s ease,
+    transform .2s ease;
 }
-.agent-card:hover::before { opacity: 1; }
-
-/* Outer soft glow halo — radial gradient follows the pointer */
-.agent-card::after {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  border-radius: inherit;
-  background: radial-gradient(
-    220px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(31, 159, 91, 0.35),
-    rgba(31, 159, 91, 0.12) 40%,
-    transparent 70%
-  );
-  opacity: 0;
-  transition: opacity .3s ease;
-  z-index: 0;
-  pointer-events: none;
+.agent-card:hover {
+  border-color: #1f9f5b;
+  transform: translateY(-3px);
+  box-shadow:
+    0 10px 24px -10px rgba(31, 159, 91, .25),
+    0 2px 6px rgba(0, 0, 0, .04);
 }
-.agent-card:hover::after { opacity: 1; }
+/* Featured ("推荐") card: green border in normal state */
+.agent-card.featured { border-color: #1f9f5b; }
 
 /* ---------- Skills & Tools page ---------- */
 .page { transition: opacity .25s ease; }
@@ -443,15 +415,20 @@ html, body {
   gap: 14px;
   padding: 16px 18px;
   background: var(--surface);
-  border: 1px solid var(--rule);
+  border: 1.5px solid #e5e3d8;
   border-radius: 12px;
   cursor: pointer;
-  transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+  transition:
+    border-color .2s ease,
+    box-shadow .25s ease,
+    transform .2s ease;
 }
 .skill-card:hover {
-  transform: translateY(-1px);
-  border-color: var(--ink);
-  box-shadow: 0 6px 20px -14px rgba(0,0,0,.18);
+  border-color: #1f9f5b;
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 20px -10px rgba(31, 159, 91, .22),
+    0 2px 6px rgba(0, 0, 0, .04);
 }
 .skill-icon {
   width: 44px; height: 44px;
@@ -560,36 +537,28 @@ html, body {
   gap: 18px;
 }
 .agent-card {
-  position: relative;
   background: var(--surface);
-  border: 1px solid var(--rule);
   border-radius: 14px;
   padding: 0;
   display: flex;
   flex-direction: column;
-  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
   cursor: pointer;
   overflow: hidden;
 }
+/* The left-edge accent bar (always present, lit on hover) */
 .agent-card::before {
   content: "";
   position: absolute;
   top: 0; left: 0;
-  width: 4px; height: 0;
+  width: 4px; height: 100%;
   background: var(--accent);
-  transition: height .25s ease;
+  opacity: .25;
+  transition: opacity .2s ease, height .25s ease;
   z-index: 2;
 }
-.agent-card:hover {
-  transform: translateY(-2px);
-  border-color: var(--ink);
-  box-shadow: 0 8px 24px -16px rgba(0,0,0,.18);
-}
-.agent-card:hover::before { height: 100%; }
-.agent-card.featured {
-  border-color: var(--accent);
-}
-.agent-card.featured::before { height: 100%; }
+.agent-card:hover::before { opacity: 1; }
+/* "推荐" featured card: lit accent bar always */
+.agent-card.featured::before { opacity: 1; }
 
 /* ---------- Illustration header (replaces icon) ---------- */
 .agent-illu {
@@ -1169,36 +1138,6 @@ html, body {
     <a href="#">联系</a>
   </div>
 </footer>
-
-<script>
-/* =============================================================================
- * Border glow tracking — drives CSS custom props on each card.
- * CSS conic-gradient + radial-gradient handle the visual; this just
- * computes pointer position → CSS variables, no SVG path math.
- * ============================================================================= */
-(function () {
-  const cards = document.querySelectorAll('.agent-card');
-  cards.forEach(card => {
-    card.addEventListener('pointermove', e => {
-      const r = card.getBoundingClientRect();
-      const mx = ((e.clientX - r.left) / r.width)  * 100;
-      const my = ((e.clientY - r.top)  / r.height) * 100;
-      // angle of the pointer relative to card centre (for conic rotation)
-      const cx = r.width  / 2;
-      const cy = r.height / 2;
-      const ang = Math.atan2(e.clientY - r.top - cy, e.clientX - r.left - cx) * 180 / Math.PI;
-      card.style.setProperty('--mx', mx.toFixed(2) + '%');
-      card.style.setProperty('--my', my.toFixed(2) + '%');
-      card.style.setProperty('--glow-angle', ang.toFixed(1) + 'deg');
-    });
-    card.addEventListener('pointerleave', () => {
-      card.style.removeProperty('--mx');
-      card.style.removeProperty('--my');
-      card.style.removeProperty('--glow-angle');
-    });
-  });
-})();
-</script>
 
 <script>
 /* =============================================================================
