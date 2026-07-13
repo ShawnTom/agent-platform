@@ -175,13 +175,6 @@ html, body {
   margin: 0 auto;
   overflow: hidden;
 }
-.hero-deco {
-  position: absolute;
-  top: 60px; left: -40px;
-  width: 60px; height: 4px;
-  background: var(--accent);
-  z-index: 2;
-}
 
 /* ==========================================================================
    Hero background — FloatingLines (React Bits–style)
@@ -220,7 +213,7 @@ html, body {
 }
 
 /* Hero content sits above canvas */
-.hero > *:not(.hero-deco):not(.hero-lines):not(.hero-fade) { position: relative; z-index: 2; }
+.hero > *:not(.hero-lines):not(.hero-fade) { position: relative; z-index: 2; }
 
 .hero-eyebrow {
   display: inline-flex;
@@ -772,7 +765,6 @@ html, body {
 
 <!-- ░░ Hero ░░ -->
 <section class="hero">
-  <span class="hero-deco"></span>
 
   <!-- FloatingLines background (React Bits–style: 3 stacked sine-wave layers) -->
   <canvas id="hero-lines" class="hero-lines" aria-hidden="true"></canvas>
