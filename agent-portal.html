@@ -116,9 +116,25 @@ html, body {
   border-radius: 2px;
   border-top: none; border-right: none;
 }
-.nav { display: flex; gap: 28px; font-size: 14px; color: var(--muted); }
-.nav a { color: var(--muted); text-decoration: none; }
-.nav a:hover, .nav a.active { color: var(--ink); }
+.nav { display: flex; gap: 8px; font-size: 14px; color: var(--muted); }
+.nav-tab {
+  position: relative;
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color .15s ease, background .15s ease;
+}
+.nav-tab:hover { color: var(--ink); background: var(--bg2); }
+.nav-tab.active { color: var(--ink); font-weight: 700; background: var(--bg2); }
+.nav-tab.active::after {
+  content: "";
+  position: absolute;
+  left: 14px; right: 14px; bottom: 2px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+}
 .top-actions { display: flex; gap: 10px; align-items: center; }
 .btn {
   font-family: inherit;
@@ -311,6 +327,185 @@ html, body {
   pointer-events: none;
 }
 .agent-card:hover::after { opacity: 1; }
+
+/* ---------- Skills & Tools page ---------- */
+.page { transition: opacity .25s ease; }
+.page.is-hidden { display: none; }
+
+/* Hero */
+.skills-hero { margin-bottom: 28px; }
+.skills-hero h2 {
+  font-size: clamp(26px, 3vw, 34px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.count-pill {
+  font-family: 'InstrumentSerif', serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent-ink);
+  font-size: 0.9em;
+}
+.skills-hero > p { color: var(--muted); font-size: 14.5px; max-width: 640px; margin-bottom: 24px; }
+
+.skills-search {
+  max-width: 640px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.skills-search:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(31,159,91,.10);
+}
+.skills-search svg { color: var(--accent); flex: 0 0 18px; }
+.skills-search input {
+  flex: 1; border: none; outline: none; background: transparent;
+  font-family: inherit; font-size: 15px; color: var(--ink);
+}
+.skills-search input::placeholder { color: var(--muted2); }
+.kbd {
+  font-size: 12px; color: var(--muted);
+  border: 1px solid var(--rule); padding: 2px 7px;
+  border-radius: 5px; background: var(--bg);
+}
+
+/* Toolbar */
+.skills-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+  margin: 28px 0 16px;
+}
+.skills-tabs { display: flex; gap: 4px; padding: 4px; background: var(--bg2); border-radius: 10px; }
+.skills-tab {
+  font-family: inherit; font-size: 14px; font-weight: 500;
+  padding: 8px 16px; border: none; background: transparent;
+  color: var(--muted); border-radius: 7px; cursor: pointer;
+  transition: color .15s ease, background .15s ease;
+}
+.skills-tab:hover { color: var(--ink); }
+.skills-tab.active {
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 700;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+.skills-controls { display: flex; gap: 8px; }
+.ctrl-btn {
+  font-family: inherit; font-size: 13px;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 14px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color .15s ease, background .15s ease;
+}
+.ctrl-btn:hover { border-color: var(--ink); }
+.ctrl-btn svg { width: 14px; height: 14px; color: var(--muted); }
+
+/* Grid */
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 720px) {
+  .skills-grid { grid-template-columns: 1fr; }
+}
+
+/* Skill card */
+.skill-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.skill-card:hover {
+  transform: translateY(-1px);
+  border-color: var(--ink);
+  box-shadow: 0 6px 20px -14px rgba(0,0,0,.18);
+}
+.skill-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  flex: 0 0 44px;
+}
+.skill-body { min-width: 0; }
+.skill-title-row {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 4px;
+}
+.skill-title {
+  font-size: 15px; font-weight: 700; color: var(--ink);
+  letter-spacing: -0.005em;
+}
+.skill-meta {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; color: var(--muted);
+}
+.skill-meta .star { color: #e5a32b; }
+.skill-meta .dot { color: var(--muted2); margin: 0 2px; }
+.skill-desc {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+/* Card actions (hover-only: star + download) */
+.skill-actions {
+  display: flex; gap: 6px;
+  opacity: 0;
+  transition: opacity .15s ease;
+}
+.skill-card:hover .skill-actions { opacity: 1; }
+.icon-btn {
+  width: 30px; height: 30px;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  border-radius: 7px;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--muted);
+  transition: background .15s ease, color .15s ease, border-color .15s ease, transform .1s ease;
+}
+.icon-btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+.icon-btn.faved { color: #e5a32b; border-color: #e5a32b; background: #fff8eb; }
+.icon-btn.faved:hover { background: #e5a32b; color: #fff; }
+.icon-btn:active { transform: scale(.92); }
+.icon-btn svg { width: 14px; height: 14px; }
+
+/* Empty / no-result state */
+.skills-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+  font-size: 14px;
+}
 
 /* ---------- Section heading ---------- */
 .section {
@@ -523,12 +718,9 @@ html, body {
     <span class="brand-mark"></span>
     <span>Agent Hub</span>
   </div>
-  <nav class="nav">
-    <a href="#" class="active">智能体</a>
-    <a href="#">工作流</a>
-    <a href="#">知识库</a>
-    <a href="#">监控</a>
-    <a href="#">定价</a>
+  <nav class="nav" role="tablist">
+    <a href="#agents"      class="nav-tab active" data-tab="agents">智能体中心</a>
+    <a href="#skills"      class="nav-tab"        data-tab="skills">技能与工具</a>
   </nav>
   <div class="top-actions">
     <a class="btn" href="#">登录</a>
@@ -553,7 +745,7 @@ html, body {
 </section>
 
 <!-- ░░ Agents ░░ -->
-<section class="section" id="agents">
+<section class="section page" id="agents" data-page="agents">
 
   <div class="section-head">
     <div>
@@ -925,6 +1117,47 @@ html, body {
   </div>
 </section>
 
+<!-- ░░ Skills & Tools ░░ -->
+<section class="section page is-hidden" id="skills" data-page="skills" aria-label="技能与工具">
+
+  <!-- Hero: 探索全部海量技能 -->
+  <div class="skills-hero">
+    <h2>探索全部 <span class="count-pill">50000+</span> 海量技能</h2>
+    <p>根据热门场景，为你推荐 300+ 内置的最佳实践技能，你可以在这里直接挑选与使用。</p>
+
+    <div class="skills-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+      </svg>
+      <input type="text" id="skills-search-input" placeholder="搜索技能名称…" autocomplete="off">
+      <span class="kbd">⌘ K</span>
+    </div>
+  </div>
+
+  <!-- Filter row: tabs + sort -->
+  <div class="skills-toolbar">
+    <div class="skills-tabs" role="tablist">
+      <button class="skills-tab active" data-filter="recommend">推荐技能</button>
+      <button class="skills-tab"        data-filter="all">全部技能</button>
+    </div>
+    <div class="skills-controls">
+      <button class="ctrl-btn" id="skills-category">
+        <span>所有场景</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <button class="ctrl-btn" id="skills-sort">
+        <span>默认排序</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- 2-col skill grid (rendered by JS) -->
+  <div class="skills-grid" id="skills-grid">
+    <!-- cards injected here -->
+  </div>
+</section>
+
 <!-- ░░ Footer ░░ -->
 <footer class="foot">
   <div>© 2026 Agent Hub · 让流程跑在 AI 上</div>
@@ -968,6 +1201,194 @@ html, body {
 
 <script>
 /* =============================================================================
+ * Tab switching (智能体中心 / 技能与工具)
+ * ============================================================================= */
+(function () {
+  const tabs   = document.querySelectorAll('.nav-tab');
+  const pages  = document.querySelectorAll('.page');
+  const heroEl = document.querySelector('.hero');
+
+  function show(name) {
+    pages.forEach(p => p.classList.toggle('is-hidden', p.dataset.page !== name));
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+    /* Hero lines only belong to the agents landing — hide on skills page. */
+    if (heroEl) heroEl.style.display = (name === 'agents') ? '' : 'none';
+    /* Scroll back to top so the new page is fully in view. */
+    window.scrollTo({ top: 0, behavior: 'instant' in window ? 'auto' : 'auto' });
+    history.replaceState(null, '', '#' + name);
+  }
+
+  tabs.forEach(t => t.addEventListener('click', e => {
+    e.preventDefault();
+    show(t.dataset.tab);
+  }));
+
+  /* Honour URL hash on first load. */
+  const initial = location.hash.replace('#', '');
+  if (initial && document.querySelector(`[data-page="${initial}"]`)) show(initial);
+})();
+</script>
+
+<script>
+/* =============================================================================
+ * Skills & Tools — data, render, search, favorite, download
+ * ============================================================================= */
+(function () {
+  const grid = document.getElementById('skills-grid');
+  if (!grid) return;
+
+  /* ---- Data set ----
+     Colors inspired by the original reference design: pastel icon tiles
+     that pop against the cream background. */
+  const SKILLS = [
+    { id: 'doc',     name: '文档处理',  desc: '自动提取长文档、会议纪要、新闻报道的核心观点和关键信息，生成结构化摘要。', cat: '文档', icon: '📄', bg: '#ffe1d6', stars: 4.8, uses: '12.5K', recommend: true },
+    { id: 'info',    name: '信息检索',  desc: '基于知识库的实时检索增强生成，引用透明、来源可溯，支持中英文混合查询。',     cat: '搜索', icon: '🔍', bg: '#d8f5e3', stars: 4.8, uses: '12.5K', recommend: true },
+    { id: 'summary', name: '会议总结',  desc: '上传会议录音或文字稿，自动生成待办、决议、风险点与下一步行动。',                  cat: '办公', icon: '💡', bg: '#fff1d6', stars: 4.7, uses: '9.2K',  recommend: true },
+    { id: 'qa',      name: '智能问答',  desc: '多轮对话式问答，自动反问澄清意图，结合企业知识库给出有出处的答复。',           cat: '搜索', icon: '💬', bg: '#e9f0ff', stars: 4.9, uses: '23.1K', recommend: true },
+    { id: 'data',    name: '数据分析',  desc: '上传 CSV/Excel/数据库连接，用自然语言提问即可生成图表与洞察报告。',           cat: '数据', icon: '📊', bg: '#efe8ff', stars: 4.8, uses: '8.4K',  recommend: true },
+    { id: 'draft',   name: '邮件草稿',  desc: '根据上下文自动起草邮件、润色语气、生成多版本候选。',                              cat: '办公', icon: '✏️', bg: '#ffe1ee', stars: 4.6, uses: '6.1K',  recommend: true },
+    { id: 'qa2',     name: '文档处理',  desc: '自动提取长文档、会议纪要、新闻报道的核心观点和关键信息，生成结构化…',           cat: '文档', icon: '🗂️', bg: '#dff0fb', stars: 4.8, uses: '12.5K', recommend: false },
+    { id: 'info2',   name: '信息检索',  desc: '基于知识库的实时检索增强生成，引用透明、来源可溯，支持中英文混合查询…',         cat: '搜索', icon: '🛡️', bg: '#d8f5e3', stars: 4.8, uses: '12.5K', recommend: false },
+    { id: 'draft2',  name: '文本润色',  desc: '对中英文长文进行风格、语气、可读性润色，保留原意的同时提升表达力。',           cat: '内容', icon: '✨', bg: '#fff1d6', stars: 4.7, uses: '7.8K',  recommend: false },
+    { id: 'trans',   name: '多语翻译',  desc: '支持 100+ 语种互译，保留原文格式、术语一致性与上下文语气。',                      cat: '内容', icon: '🌐', bg: '#e9f0ff', stars: 4.9, uses: '15.2K', recommend: false },
+    { id: 'code',    name: '代码助手',  desc: '代码生成、重构、解释、单元测试与 Bug 定位，覆盖 30+ 主流语言。',               cat: '开发', icon: '⌨️', bg: '#efe8ff', stars: 4.9, uses: '20.4K', recommend: false },
+    { id: 'img',     name: '图像理解',  desc: '对截图、设计稿、表格图片进行结构化解析与文字提取。',                              cat: '视觉', icon: '🖼️', bg: '#ffe1ee', stars: 4.6, uses: '5.7K',  recommend: false }
+  ];
+
+  /* ---- Persisted favourites (localStorage) ---- */
+  const FAV_KEY = 'agent-portal.skills.favs';
+  let favs = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || '[]'));
+  const saveFavs = () => localStorage.setItem(FAV_KEY, JSON.stringify([...favs]));
+
+  /* ---- Download counter (in-memory demo) ---- */
+  const dlCount = {};
+
+  /* ---- State ---- */
+  let filter = 'recommend';
+  let query  = '';
+
+  /* ---- Render ---- */
+  function render() {
+    let list = SKILLS;
+    if (filter === 'recommend') list = list.filter(s => s.recommend);
+    if (query) {
+      const q = query.toLowerCase();
+      list = list.filter(s =>
+        s.name.toLowerCase().includes(q) ||
+        s.desc.toLowerCase().includes(q)  ||
+        s.cat.toLowerCase().includes(q)
+      );
+    }
+
+    if (!list.length) {
+      grid.innerHTML = `<div class="skills-empty">没有找到与 “${escapeHtml(query)}” 相关的技能。</div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(s => `
+      <article class="skill-card" data-id="${s.id}">
+        <div class="skill-icon" style="background:${s.bg}">${s.icon}</div>
+        <div class="skill-body">
+          <div class="skill-title-row">
+            <span class="skill-title">${escapeHtml(s.name)}</span>
+            <span class="skill-meta">
+              <span class="star">★</span> ${s.stars}
+              <span class="dot">·</span> 使用 ${s.uses}
+            </span>
+          </div>
+          <p class="skill-desc">${escapeHtml(s.desc)}</p>
+        </div>
+        <div class="skill-actions">
+          <button class="icon-btn js-fav ${favs.has(s.id) ? 'faved' : ''}"
+                  title="${favs.has(s.id) ? '取消收藏' : '收藏'}" aria-label="收藏">
+            <svg viewBox="0 0 24 24" fill="${favs.has(s.id) ? 'currentColor' : 'none'}"
+                 stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/>
+            </svg>
+          </button>
+          <button class="icon-btn js-dl" title="下载" aria-label="下载">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/>
+            </svg>
+          </button>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
+  /* ---- Event delegation ---- */
+  grid.addEventListener('click', e => {
+    const favBtn = e.target.closest('.js-fav');
+    if (favBtn) {
+      const id = favBtn.closest('.skill-card').dataset.id;
+      if (favs.has(id)) { favs.delete(id); favBtn.classList.remove('faved'); }
+      else              { favs.add(id);    favBtn.classList.add('faved'); }
+      saveFavs();
+      return;
+    }
+    const dlBtn = e.target.closest('.js-dl');
+    if (dlBtn) {
+      const card = dlBtn.closest('.skill-card');
+      const id = card.dataset.id;
+      dlCount[id] = (dlCount[id] || 0) + 1;
+      dlBtn.style.background = 'var(--accent)';
+      dlBtn.style.color = '#fff';
+      dlBtn.style.borderColor = 'var(--accent)';
+      setTimeout(() => {
+        dlBtn.style.background = '';
+        dlBtn.style.color = '';
+        dlBtn.style.borderColor = '';
+      }, 600);
+      console.log(`[download] ${id} · count=${dlCount[id]}`);
+    }
+  });
+
+  /* Tabs */
+  document.querySelectorAll('.skills-tab').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.skills-tab').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      filter = t.dataset.filter;
+      render();
+    });
+  });
+
+  /* Search */
+  const searchInput = document.getElementById('skills-search-input');
+  let searchTimer;
+  searchInput.addEventListener('input', e => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      query = e.target.value.trim();
+      render();
+    }, 120);
+  });
+  /* ⌘K / Ctrl+K shortcut focuses search when on skills page. */
+  window.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      const skills = document.getElementById('skills');
+      if (skills && !skills.classList.contains('is-hidden')) {
+        searchInput.focus();
+        searchInput.select();
+      }
+    }
+  });
+
+  /* Initial render */
+  render();
+})();
+</script>
+
+<script>
+/* =============================================================================
  * FloatingLines (React Bits–style)
  * 3 stacked sine-wave layers; mouse bends nearby lines; subtle parallax.
  * Site palette: greens #7bd0a3 / #2db371 / #1f9f5b
@@ -984,11 +1405,33 @@ html, body {
   let t0 = performance.now();
 
   /* Three layers — react-bits style: top / middle / bottom */
-  const layers = [
-    { yFrac: 0.18, count: 14, spacing: 7,  amp: 14, freq: 0.008, speed: 0.00020, alpha: 0.55, width: 0.7, phase: 0 },
-    { yFrac: 0.50, count: 18, spacing: 8,  amp: 22, freq: 0.006, speed: 0.00015, alpha: 0.45, width: 0.9, phase: 1.2 },
-    { yFrac: 0.82, count: 14, spacing: 7,  amp: 16, freq: 0.009, speed: 0.00025, alpha: 0.55, width: 0.7, phase: 2.4 }
+  /* Five bands at different vertical positions with different character. */
+  const layerBands = [
+    { yFrac: 0.10, count: 6,  spacing: 6,  baseAmp: 8,  baseFreq: 0.0050, speed: 0.00018, alpha: 0.40, width: 0.6 },
+    { yFrac: 0.28, count: 14, spacing: 8,  baseAmp: 22, baseFreq: 0.0042, speed: 0.00014, alpha: 0.55, width: 0.8 },
+    { yFrac: 0.46, count: 9,  spacing: 11, baseAmp: 30, baseFreq: 0.0060, speed: 0.00010, alpha: 0.45, width: 1.0 },
+    { yFrac: 0.64, count: 18, spacing: 7,  baseAmp: 16, baseFreq: 0.0078, speed: 0.00022, alpha: 0.55, width: 0.7 },
+    { yFrac: 0.85, count: 11, spacing: 9,  baseAmp: 20, baseFreq: 0.0056, speed: 0.00016, alpha: 0.50, width: 0.8 }
   ];
+
+  /* Build actual line specs by jittering each line's params around the band.
+     This breaks the "regular sine wave" look — every line feels unique. */
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const layers = layerBands.map(b => ({
+    yFrac:  b.yFrac,
+    alpha:  b.alpha,
+    width:  b.width,
+    speed:  b.speed,
+    lines: Array.from({ length: b.count }, (_, i) => ({
+      offsetY: (i - (b.count - 1) / 2) * b.spacing + rand(-2, 2),
+      amp:     b.baseAmp * rand(0.6, 1.35),
+      freq:    b.baseFreq * rand(0.7, 1.4),
+      phase:   rand(0, Math.PI * 2),
+      speed:   b.speed  * rand(0.6, 1.4),
+      jitter:  rand(-0.3, 0.3),   // small static vertical jitter (not zero!)
+      width:   b.width  * rand(0.85, 1.2)
+    }))
+  }));
 
   /* Mouse-driven bend */
   const BEND_RADIUS = 140;
@@ -1015,25 +1458,26 @@ html, body {
     for (const L of layers) {
       const baseY = H * L.yFrac;
       ctx.strokeStyle = `rgba(31, 159, 91, ${L.alpha})`;
-      ctx.lineWidth = L.width;
 
-      for (let i = 0; i < L.count; i++) {
-        const offsetY = (i - (L.count - 1) / 2) * L.spacing;
+      for (const ln of L.lines) {
         ctx.beginPath();
-        const stepX = 6;
-        for (let x = -20; x <= W + 20; x += stepX) {
-          /* Sine wave: amplitude modulated by time + layer phase */
-          const sine = Math.sin(x * L.freq + time * L.speed + L.phase) * L.amp;
-          let y = baseY + offsetY + sine;
+        ctx.lineWidth = ln.width;
+        /* Break the regular sine by summing two sine waves at different freqs.
+           This makes every line undulate like a real fibre, not a metronome. */
+        for (let x = -20; x <= W + 20; x += 4) {
+          const t = time * ln.speed;
+          const wave =
+            Math.sin(x * ln.freq         + t + ln.phase) * ln.amp +
+            Math.sin(x * ln.freq * 2.3   + t * 0.7) * (ln.amp * 0.32);
+          let y = baseY + ln.offsetY + ln.jitter * 30 + wave;
 
           /* Mouse bend: push nearby points away from cursor */
           if (mouse.x > -1000) {
             const dx = x - mouse.x;
-            const dy = (baseY + offsetY) - mouse.y;
+            const dy = (baseY + ln.offsetY) - mouse.y;
             const d = Math.hypot(dx, dy);
             if (d < BEND_RADIUS) {
               const k = 1 - d / BEND_RADIUS;
-              /* Push along the radial direction from cursor */
               const len = d || 1;
               y -= (dy / len) * k * k * BEND_STRENGTH;
             }
