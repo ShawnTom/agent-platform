@@ -198,13 +198,23 @@ html, body {
   opacity: .9;
 }
 
-/* Soft fade mask so canvas blends with page bg */
+/* Soft fade mask:
+   1) Radial wash centred near the headline (top-left) so the green lines
+      behind the title go half-transparent and stop competing for attention.
+   2) Outer 4-edge linear-gradient keeps the canvas clipped to the hero box. */
 .hero-fade {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
   background:
+    radial-gradient(
+      ellipse 60% 55% at 22% 38%,
+      var(--bg)    0%,
+      var(--bg)   22%,
+      rgba(245, 243, 238, .55) 42%,
+      transparent 70%
+    ),
     linear-gradient(180deg, var(--bg) 0%, transparent 14%, transparent 70%, var(--bg) 100%),
     linear-gradient(90deg,  var(--bg) 0%, transparent 14%, transparent 86%, var(--bg) 100%);
 }
