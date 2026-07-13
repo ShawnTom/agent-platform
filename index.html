@@ -624,12 +624,13 @@ html, body {
   background: var(--ink);
   color: #fff;
   border-color: var(--ink);
-  padding: 0 11px 0 8px;            /* tighter left padding for "立即体验" */
+  padding: 0 10px 0 5px;            /* tight left padding; right gives the → room */
 }
 .agent-card:hover .agent-arrow .arr-label {
-  max-width: 80px;
+  /* Just wide enough for "立即体验" (4 chars at 11px ≈ 44px) plus a little slack. */
+  max-width: 50px;
   opacity: 1;
-  margin-left: 8px;                 /* a touch more space before the → */
+  margin-left: 6px;                 /* space between text and the → */
 }
 .agent-card:hover .agent-arrow .arr-icon { transform: translateX(2px); }
 
