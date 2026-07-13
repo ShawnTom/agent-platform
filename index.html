@@ -158,6 +158,16 @@ html, body {
   border-color: var(--ink);
 }
 .btn.primary:hover { background: #000; }
+.btn.admin {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  font-weight: 600;
+}
+.btn.admin:hover {
+  background: var(--accent-ink);
+  border-color: var(--accent-ink);
+}
 .btn .arr { font-size: 11px; opacity: .9; }
 
 /* ---------- Hero ---------- */
@@ -723,8 +733,7 @@ html, body {
     <a href="#skills"      class="nav-tab"        data-tab="skills">技能与工具</a>
   </nav>
   <div class="top-actions">
-    <a class="btn" href="#">登录</a>
-    <a class="btn primary" href="#">开始使用 <span class="arr">→</span></a>
+    <a class="btn admin" href="#">管理员登录</a>
   </div>
 </header>
 
