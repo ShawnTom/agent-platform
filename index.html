@@ -160,15 +160,17 @@ html, body {
   border-color: var(--ink);
 }
 .btn.primary:hover { background: #000; }
+/* "管理员登录" — neutral secondary button (not the primary brand action). */
 .btn.admin {
-  background: var(--brand);
-  color: #fff;
-  border-color: var(--brand);
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--rule);
   font-weight: 600;
 }
 .btn.admin:hover {
-  background: var(--brand-ink);
-  border-color: var(--brand-ink);
+  background: var(--bg2);
+  border-color: var(--ink);
+  color: var(--ink);
 }
 .btn .arr { font-size: 11px; opacity: .9; }
 
@@ -1354,9 +1356,11 @@ html, body {
      and speed inside a layer — only the vertical offset and a small phase
      shift (so the lines don't all hit crest at the same x) vary per line. */
   const layerBands = [
-    { yFrac: 0.22, count: 10, spacing: 7, amp: 16, freq: 0.0050, speed: 0.00018, alpha: 0.50, width: 0.7 },
-    { yFrac: 0.50, count: 14, spacing: 8, amp: 26, freq: 0.0038, speed: 0.00012, alpha: 0.55, width: 0.9 },
-    { yFrac: 0.78, count: 10, spacing: 7, amp: 18, freq: 0.0046, speed: 0.00016, alpha: 0.50, width: 0.7 }
+    /* slope > 0 = band tilts down to the right, < 0 = down to the left.
+       0.12 means each side is ~12% of H lower than the centre. */
+    { yFrac: 0.22, count: 10, spacing: 7, amp: 16, freq: 0.0050, speed: 0.00018, alpha: 0.50, width: 0.7, slope: -0.12 },
+    { yFrac: 0.50, count: 14, spacing: 8, amp: 26, freq: 0.0038, speed: 0.00012, alpha: 0.55, width: 0.9, slope:  0.00 },
+    { yFrac: 0.78, count: 10, spacing: 7, amp: 18, freq: 0.0046, speed: 0.00016, alpha: 0.50, width: 0.7, slope:  0.12 }
   ];
 
   /* Build line specs — deterministic, no randomness.
@@ -1367,6 +1371,7 @@ html, body {
     alpha:  b.alpha,
     speed:  b.speed,
     width:  b.width,
+    slope:  b.slope,
     lines: Array.from({ length: b.count }, (_, i) => ({
       offsetY: (i - (b.count - 1) / 2) * b.spacing,
       amp:     b.amp,
@@ -1408,7 +1413,10 @@ html, body {
     ];
     for (let li = 0; li < layers.length; li++) {
       const L = layers[li];
-      const baseY = H * L.yFrac;
+      /* Each layer gets a global slope so the band tilts across the screen.
+         Top band slopes down-left, mid stays level, bottom slopes up-left
+         (mirror feel). This is the "倾斜一点" you wanted. */
+      const slope = L.slope;
       ctx.strokeStyle = `rgba(${PALETTE[li] || PALETTE[0]}, ${L.alpha})`;
 
       for (const ln of L.lines) {
@@ -1419,6 +1427,9 @@ html, body {
            layer — the only variation per line is the phase offset above. */
         for (let x = -20; x <= W + 20; x += 4) {
           const t = time * ln.speed;
+          /* Tilt: every x unit adds slope*W*0.5 to y, so the line is tilted. */
+          const tilt = slope * x;
+          const baseY = H * L.yFrac + tilt;
           const wave =
             Math.sin(x * ln.freq       + t + ln.phase) * ln.amp +
             Math.sin(x * ln.freq * 2.1 + t * 0.7)        * (ln.amp * 0.18);
