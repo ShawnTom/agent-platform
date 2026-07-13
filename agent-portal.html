@@ -129,14 +129,7 @@ html, body {
 }
 .nav-tab:hover { color: var(--ink); background: var(--bg2); }
 .nav-tab.active { color: var(--ink); font-weight: 700; background: var(--bg2); }
-.nav-tab.active::after {
-  content: "";
-  position: absolute;
-  left: 14px; right: 14px; bottom: 2px;
-  height: 2px;
-  background: var(--brand);
-  border-radius: 2px;
-}
+/* No underline — the active tab is identified by bg + bold text only. */
 .top-actions { display: flex; gap: 10px; align-items: center; }
 .btn {
   font-family: inherit;
@@ -311,8 +304,18 @@ html, body {
     0 10px 24px -10px rgba(0, 166, 81, .25),
     0 2px 6px rgba(0, 0, 0, .04);
 }
-/* Featured ("推荐") card: green border in normal state */
-.agent-card.featured { border-color: var(--accent); }
+/* "推荐" tag — small badge inside the card, NOT the border itself.
+   The whole point of grey-border-normal is consistency. */
+.agent-card.featured .agent-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brand-ink);
+  background: var(--brand-soft);
+  padding: 3px 8px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
 
 /* ---------- Skills & Tools page ---------- */
 .page { transition: opacity .25s ease; }
@@ -556,7 +559,6 @@ html, body {
   height: 168px;
   background: #f3efe5;
   overflow: hidden;
-  border-bottom: 1px solid var(--rule);
 }
 .agent-illu svg { width: 100%; height: 100%; display: block; }
 .agent-card.featured .agent-illu { background: #e8eef7; }
@@ -772,6 +774,7 @@ html, body {
         </svg>
       </div>
       <div class="agent-body">
+        <span class="agent-badge">推荐</span>
         <div class="agent-title">知识助手 <span class="star"></span></div>
         <p class="agent-desc">基于企业知识库的智能问答助手。回答有出处，引用有页码，问错会自动反问澄清。</p>
         <div class="agent-tags">
