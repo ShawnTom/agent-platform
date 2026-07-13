@@ -33,16 +33,16 @@
 }
 
 :root {
-  /* Theme — extracted from Shanghai Electric (上海电气) logo */
-  --bg: #f5f7fa;                       /* cooler light grey background */
-  --bg2: #e8edf3;
-  --surface: #ffffff;
+  /* Warm cream background (restored from previous version) */
+  --bg: #f5f3ee;
+  --bg2: #ecebe3;
+  --surface: #faf9f5;
   --ink: #1a1a1a;
   --ink2: #2a2a2a;
-  --muted: #6b7280;
-  --muted2: #9ca3af;
-  --rule: #dde3ea;
-  --rule-soft: #e9eef4;
+  --muted: #6b6b66;
+  --muted2: #9a9a93;
+  --rule: #d9d6cc;
+  --rule-soft: #e4e1d8;
   /* Brand: blue is primary, green is interactive/accent (mirrors logo halves) */
   --brand: #1565c0;                    /* 上海电气 blue */
   --brand-ink: #0d4a96;
@@ -552,12 +552,12 @@ html, body {
 .agent-illu {
   position: relative;
   height: 168px;
-  background: #f3f6fa;
+  background: #f3efe5;
   overflow: hidden;
   border-bottom: 1px solid var(--rule);
 }
 .agent-illu svg { width: 100%; height: 100%; display: block; }
-.agent-card.featured .agent-illu { background: var(--brand-soft); }
+.agent-card.featured .agent-illu { background: #e8eef7; }
 
 .agent-body {
   padding: 18px 22px 22px;
@@ -693,8 +693,8 @@ html, body {
           <rect x="0" y="0" width="32" height="32" fill="#1565c0"/>
           <path d="M0,32 L32,0 L32,32 Z" fill="#00a651"/>
           <!-- Inner diagonal slash in white for the split -->
-          <path d="M11,32 L21,0 L23,0 L13,32 Z" fill="#ffffff"/>
-          <path d="M11,32 L21,0 L19,0 L9,32 Z" fill="#ffffff" opacity=".0"/>
+          <path d="M11,32 L21,0 L23,0 L13,32 Z" fill="#faf9f5"/>
+          <path d="M11,32 L21,0 L19,0 L9,32 Z" fill="#faf9f5" opacity=".0"/>
         </g>
         <!-- White outline ring -->
         <circle cx="16" cy="16" r="15" fill="none" stroke="#ffffff" stroke-width="1" opacity=".25"/>
@@ -744,7 +744,7 @@ html, body {
           </g>
           <!-- search input -->
           <g transform="translate(60,46)">
-            <rect width="280" height="42" rx="21" fill="#ffffff" stroke="#dde3ea" stroke-width="1"/>
+            <rect width="280" height="42" rx="21" fill="#faf9f5" stroke="#d9d6cc" stroke-width="1"/>
             <g transform="translate(18,21)">
               <path d="M0,-2 L4,-6 L8,-2 L4,2 Z" fill="#00a651"/>
               <circle cx="4" cy="0" r="1" fill="#fff"/>
@@ -791,7 +791,7 @@ html, body {
           </g>
           <!-- chart card -->
           <g transform="translate(50,28)">
-            <rect width="220" height="112" rx="10" fill="#ffffff" stroke="#dde3ea" stroke-width="1"/>
+            <rect width="220" height="112" rx="10" fill="#faf9f5" stroke="#d9d6cc" stroke-width="1"/>
             <!-- title bar -->
             <rect x="14" y="14" width="70" height="6" rx="3" fill="#d9d6cc"/>
             <rect x="14" y="26" width="40" height="4" rx="2" fill="#e8e5d8"/>
@@ -815,7 +815,7 @@ html, body {
           </g>
           <!-- side panel: incident list -->
           <g transform="translate(290,46)">
-            <rect width="86" height="78" rx="8" fill="#fff" stroke="#dde3ea" stroke-width="1"/>
+            <rect width="86" height="78" rx="8" fill="#fff" stroke="#d9d6cc" stroke-width="1"/>
             <rect x="10" y="12" width="44" height="4" rx="2" fill="#d9d6cc"/>
             <g transform="translate(10,24)">
               <circle cx="4" cy="4" r="3" fill="#00a651"/>
@@ -856,7 +856,7 @@ html, body {
           </g>
           <!-- meeting window -->
           <g transform="translate(40,22)">
-            <rect width="240" height="124" rx="10" fill="#ffffff" stroke="#dde3ea" stroke-width="1"/>
+            <rect width="240" height="124" rx="10" fill="#faf9f5" stroke="#d9d6cc" stroke-width="1"/>
             <!-- header -->
             <rect x="0" y="0" width="240" height="26" rx="10" fill="#f3f6fa"/>
             <rect x="0" y="16" width="240" height="10" fill="#f3f6fa"/>
@@ -936,7 +936,7 @@ html, body {
           </g>
           <!-- blueprint card -->
           <g transform="translate(40,22)">
-            <rect width="220" height="124" rx="8" fill="#ffffff" stroke="#dde3ea" stroke-width="1"/>
+            <rect width="220" height="124" rx="8" fill="#faf9f5" stroke="#d9d6cc" stroke-width="1"/>
             <!-- title bar -->
             <rect x="14" y="14" width="60" height="6" rx="3" fill="#00a651"/>
             <rect x="14" y="26" width="40" height="3" rx="1.5" fill="#bcbab0"/>
@@ -1010,7 +1010,7 @@ html, body {
           <g transform="translate(46,18)">
             <!-- shadow doc -->
             <rect x="6" y="6" width="160" height="128" rx="6" fill="#e8e5d8"/>
-            <rect width="160" height="128" rx="6" fill="#ffffff" stroke="#dde3ea" stroke-width="1"/>
+            <rect width="160" height="128" rx="6" fill="#faf9f5" stroke="#d9d6cc" stroke-width="1"/>
             <!-- doc title -->
             <rect x="14" y="14" width="80" height="6" rx="3" fill="#1a1a1a"/>
             <rect x="14" y="24" width="50" height="3" rx="1.5" fill="#bcbab0"/>
@@ -1038,7 +1038,7 @@ html, body {
           </g>
           <!-- risk panel -->
           <g transform="translate(230,30)">
-            <rect width="140" height="110" rx="8" fill="#fff" stroke="#dde3ea" stroke-width="1"/>
+            <rect width="140" height="110" rx="8" fill="#fff" stroke="#d9d6cc" stroke-width="1"/>
             <rect x="14" y="14" width="60" height="5" rx="2.5" fill="#1a1a1a"/>
             <rect x="14" y="24" width="40" height="3" rx="1.5" fill="#bcbab0"/>
             <!-- risk item -->
