@@ -1404,32 +1404,31 @@ html, body {
   const mouse = { x: -9999, y: -9999 };
   let t0 = performance.now();
 
-  /* Three layers — react-bits style: top / middle / bottom */
-  /* Five bands at different vertical positions with different character. */
+  /* Three layers — react-bits style: top / middle / bottom.
+     Each layer is a coherent "band" of parallel waves. Same frequency, amp,
+     and speed inside a layer — only the vertical offset and a small phase
+     shift (so the lines don't all hit crest at the same x) vary per line. */
   const layerBands = [
-    { yFrac: 0.10, count: 6,  spacing: 6,  baseAmp: 8,  baseFreq: 0.0050, speed: 0.00018, alpha: 0.40, width: 0.6 },
-    { yFrac: 0.28, count: 14, spacing: 8,  baseAmp: 22, baseFreq: 0.0042, speed: 0.00014, alpha: 0.55, width: 0.8 },
-    { yFrac: 0.46, count: 9,  spacing: 11, baseAmp: 30, baseFreq: 0.0060, speed: 0.00010, alpha: 0.45, width: 1.0 },
-    { yFrac: 0.64, count: 18, spacing: 7,  baseAmp: 16, baseFreq: 0.0078, speed: 0.00022, alpha: 0.55, width: 0.7 },
-    { yFrac: 0.85, count: 11, spacing: 9,  baseAmp: 20, baseFreq: 0.0056, speed: 0.00016, alpha: 0.50, width: 0.8 }
+    { yFrac: 0.22, count: 10, spacing: 7, amp: 16, freq: 0.0050, speed: 0.00018, alpha: 0.50, width: 0.7 },
+    { yFrac: 0.50, count: 14, spacing: 8, amp: 26, freq: 0.0038, speed: 0.00012, alpha: 0.55, width: 0.9 },
+    { yFrac: 0.78, count: 10, spacing: 7, amp: 18, freq: 0.0046, speed: 0.00016, alpha: 0.50, width: 0.7 }
   ];
 
-  /* Build actual line specs by jittering each line's params around the band.
-     This breaks the "regular sine wave" look — every line feels unique. */
-  const rand = (a, b) => a + Math.random() * (b - a);
+  /* Build line specs — deterministic, no randomness.
+     Phase shifts by 0.35 rad per line so the band undulates as a coherent
+     wave-train, not a stack of identical copies. */
   const layers = layerBands.map(b => ({
     yFrac:  b.yFrac,
     alpha:  b.alpha,
-    width:  b.width,
     speed:  b.speed,
+    width:  b.width,
     lines: Array.from({ length: b.count }, (_, i) => ({
-      offsetY: (i - (b.count - 1) / 2) * b.spacing + rand(-2, 2),
-      amp:     b.baseAmp * rand(0.6, 1.35),
-      freq:    b.baseFreq * rand(0.7, 1.4),
-      phase:   rand(0, Math.PI * 2),
-      speed:   b.speed  * rand(0.6, 1.4),
-      jitter:  rand(-0.3, 0.3),   // small static vertical jitter (not zero!)
-      width:   b.width  * rand(0.85, 1.2)
+      offsetY: (i - (b.count - 1) / 2) * b.spacing,
+      amp:     b.amp,
+      freq:    b.freq,
+      phase:   i * 0.35,
+      speed:   b.speed,
+      width:   b.width
     }))
   }));
 
@@ -1462,14 +1461,15 @@ html, body {
       for (const ln of L.lines) {
         ctx.beginPath();
         ctx.lineWidth = ln.width;
-        /* Break the regular sine by summing two sine waves at different freqs.
-           This makes every line undulate like a real fibre, not a metronome. */
+        /* Two stacked sines: a strong fundamental + a soft harmonic to soften
+           the geometric perfection. Same amp/freq/phase on every line in a
+           layer — the only variation per line is the phase offset above. */
         for (let x = -20; x <= W + 20; x += 4) {
           const t = time * ln.speed;
           const wave =
-            Math.sin(x * ln.freq         + t + ln.phase) * ln.amp +
-            Math.sin(x * ln.freq * 2.3   + t * 0.7) * (ln.amp * 0.32);
-          let y = baseY + ln.offsetY + ln.jitter * 30 + wave;
+            Math.sin(x * ln.freq       + t + ln.phase) * ln.amp +
+            Math.sin(x * ln.freq * 2.1 + t * 0.7)        * (ln.amp * 0.18);
+          let y = baseY + ln.offsetY + wave;
 
           /* Mouse bend: push nearby points away from cursor */
           if (mouse.x > -1000) {
