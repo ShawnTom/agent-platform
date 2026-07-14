@@ -736,9 +736,9 @@ html, body {
   /* Sit on the first text baseline of the textarea */
   margin-top: 4px;
 }
-/* The textarea — borderless, transparent; height follows content.
-   Capped at 250px; longer input scrolls inside. Sits to the right of the
-   read-only skill tag and takes all remaining width. */
+/* The textarea — borderless, transparent; height grows with content.
+   Capped at 250px via JS (autoResize) so the textarea itself scrolls
+   beyond that. Sits to the right of the read-only skill tag. */
 #chat-modal-input {
   flex: 1 1 auto;
   width: 100%;
@@ -752,9 +752,9 @@ html, body {
   line-height: 1.5;
   color: var(--ink);
   outline: none;
-  min-height: 28px;
-  /* Cap the textarea at 250px; longer input scrolls inside. */
-  max-height: 250px;
+  /* No fixed height — JS autoResize sets it from scrollHeight, capped. */
+  height: auto;
+  min-height: 22px;
   overflow-y: auto;
 }
 /* Toolbar inside the shell: model (left) + send (right) */
@@ -1995,12 +1995,14 @@ html, body {
     cm.model.value = 'qwen3-max';
     cm.root.classList.add('is-open');
     cm.root.setAttribute('aria-hidden', 'false');
-    /* Autofocus + cursor at end so user can immediately edit */
+    /* Autofocus + cursor at end so user can immediately edit.
+       Also resize now that the default prompt is seeded, so the box grows
+       to fit it (capped at 250px). */
     setTimeout(() => {
+      autoResize(cm.input);
       cm.input.focus();
       const v = cm.input.value;
       cm.input.setSelectionRange(v.length, v.length);
-      autoResize(cm.input);
     }, 50);
   }
   function closeChatModal() {
@@ -2022,14 +2024,19 @@ html, body {
     cm.input.setSelectionRange(v.length, v.length);
   });
 
-  /* No auto-resize on the textarea — content naturally grows inside.
-   The outer shell caps height at 300px and scrolls, so the textarea
-   doesn't need its own max-height. */
-  function autoResize(el) {
-    /* Reset to default — no manual height set, let content drive it. */
-    el.style.height = '';
-  }
-  cm.input.addEventListener('input', () => autoResize(cm.input));
+  /* Auto-grow textarea: grow with content up to 250px, then scroll inside. */
+    const TEXTAREA_MAX = 250;
+    function autoResize(el) {
+      // Reset to natural height so scrollHeight reflects the content size.
+      el.style.height = 'auto';
+      const newH = Math.min(el.scrollHeight, TEXTAREA_MAX);
+      el.style.height = newH + 'px';
+      // Show textarea scroll only when content actually overflows.
+      el.style.overflowY = el.scrollHeight > TEXTAREA_MAX ? 'auto' : 'hidden';
+    }
+    cm.input.addEventListener('input', () => autoResize(cm.input));
+    /* Also resize after the default prompt is seeded on open. */
+    cm.input.addEventListener('focus', () => autoResize(cm.input));
   cm.input.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
