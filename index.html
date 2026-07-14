@@ -725,18 +725,23 @@ html, body {
 }
 .chat-input-tag {
   flex: 0 0 auto;
-  font-size: 11px;
-  padding: 5px 9px;
+  height: 26px;
+  padding: 0 9px;
   background: var(--brand-soft);
   color: var(--brand-ink);
-  border-radius: 999px;
+  /* Unified 8px radius for both the skill tag and the model tag. */
+  border-radius: 8px;
   /* Read-only label, not a button */
   cursor: default;
   user-select: none;
   -webkit-user-select: none;
-  line-height: 1.2;
+  line-height: 1;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
   /* Sit on the first text baseline of the textarea */
-  margin-top: 4px;
+  margin-top: 2px;
 }
 /* The textarea — borderless, transparent; height grows with content.
    Capped at 250px via JS (autoResize) so the textarea itself scrolls
@@ -759,7 +764,7 @@ html, body {
   min-height: 22px;
   overflow-y: auto;
 }
-/* Toolbar inside the shell: model (left) + send (right) */
+/* Toolbar inside the shell: model tag (left) + send button (right) */
 .chat-input-toolbar {
   display: flex;
   align-items: center;
@@ -769,28 +774,50 @@ html, body {
   border-top: 1px solid var(--rule-soft);
 }
 .chat-input-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
-.chat-model {
-  height: 30px;
-  border: 1px solid transparent;
-  background: transparent;
+/* Model picker — tag-style with a caret.
+   Matches the skill tag's pill shape but uses a different colour
+   (neutral grey instead of brand blue) so they stay distinguishable. */
+.chat-model-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 26px;
+  padding: 0 8px;
+  background: var(--bg2);
   color: var(--ink);
   border-radius: 8px;
-  padding: 0 26px 0 10px;
-  font-family: inherit;
-  font-size: 12.5px;
   cursor: pointer;
-  outline: none;
-  transition: background .15s ease, border-color .15s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background .15s ease, color .15s ease;
+  flex: 0 0 auto;
+}
+.chat-model-tag:hover { background: var(--rule-soft); }
+.chat-model-tag select {
   appearance: none;
   -webkit-appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%239a9a93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  /* Make the inner select fill the label so clicking anywhere opens the menu. */
+  height: 100%;
 }
-.chat-model:hover { background: var(--bg2); border-color: var(--rule); }
-.chat-model:focus  { background: var(--bg2); border-color: var(--rule); }
-.chat-model optgroup { font-style: normal; font-weight: 600; color: var(--muted); }
-.chat-model option  { color: var(--ink); font-weight: 400; }
+.chat-model-caret {
+  width: 11px;
+  height: 11px;
+  color: var(--muted);
+  flex: 0 0 auto;
+  pointer-events: none;
+}
+.chat-model-tag optgroup { font-style: normal; font-weight: 600; color: var(--muted); }
+.chat-model-tag option  { color: var(--ink); font-weight: 400; }
 /* Send button — round, smaller, blue accent */
 .chat-send {
   height: 32px;
@@ -1680,10 +1707,10 @@ html, body {
           <textarea id="chat-modal-input" placeholder="输入消息…（Shift+Enter 换行，Enter 发送）" rows="1"></textarea>
         </div>
 
-        <!-- Bottom toolbar: model picker (left) + send button (right) -->
+        <!-- Bottom toolbar: model picker (left, tag-style) + send button (right) -->
         <div class="chat-input-toolbar">
-          <div class="chat-input-left">
-            <select class="chat-model" id="chat-modal-model" aria-label="选择模型">
+          <label class="chat-model-tag" for="chat-modal-model">
+            <select id="chat-modal-model" aria-label="选择模型">
               <optgroup label="千问（主）">
                 <option value="qwen3-max"      selected>Qwen3 Max</option>
                 <option value="qwen3-plus">Qwen3 Plus</option>
@@ -1698,7 +1725,10 @@ html, body {
                 <option value="deepseek-v3">DeepSeek V3</option>
               </optgroup>
             </select>
-          </div>
+            <svg class="chat-model-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </label>
           <button class="chat-send" id="chat-modal-send" aria-label="发送">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 19V5M5 12l7-7 7 7"/>
