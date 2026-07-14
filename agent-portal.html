@@ -1883,12 +1883,15 @@ html, body {
     const favBtn = e.target.closest('.js-fav');
     if (favBtn) {
       const id = favBtn.closest('.skill-card').dataset.id;
+      const svg = favBtn.querySelector('svg');
       if (favs.has(id)) {
         favs.delete(id);
         favBtn.classList.remove('faved');
+        if (svg) svg.setAttribute('fill', 'none');
       } else {
         favs.add(id);
         favBtn.classList.add('faved');
+        if (svg) svg.setAttribute('fill', 'currentColor');
       }
       saveFavs();
       return;
