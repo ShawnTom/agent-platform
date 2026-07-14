@@ -701,6 +701,7 @@ html, body {
   padding: 12px 14px 8px;
   display: flex;
   flex-direction: column;
+  /* 8px gap between the tag row and the textarea — fixed by spec. */
   gap: 8px;
   /* Cap the input shell at 300px; if the textarea grows beyond that,
      the shell scrolls internally. */
@@ -758,9 +759,11 @@ html, body {
   color: var(--ink);
   outline: none;
   min-height: 28px;
+  /* Cap the textarea at 250px; longer input scrolls inside. */
+  max-height: 250px;
   /* Scrollbar lives on the shell, not the textarea — so the input box
      itself never shows its own scrollbar. */
-  overflow-y: hidden;
+  overflow-y: auto;
 }
 /* Toolbar inside the shell: model (left) + send (right) */
 .chat-input-toolbar {
