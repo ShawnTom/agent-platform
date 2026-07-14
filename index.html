@@ -601,15 +601,13 @@ html, body {
 .chat-modal-panel {
   width: 640px;
   max-width: 100%;
-  /* Cap the whole dialog at 300px; the panel itself scrolls vertically
-     when the body messages + composer exceed this height. */
+  /* Modal sized to its content; only the input shell below is capped at 300px. */
   height: auto;
-  max-height: 300px;
+  max-height: calc(100vh - 48px);
   display: flex;
   flex-direction: column;
   padding: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 /* Top-left: skill name · prompt description (single line, ellipsis if long) */
 .chat-modal-head {
@@ -650,9 +648,8 @@ html, body {
   min-width: 0;
 }
 .chat-modal-body {
-  /* Body grows naturally — no fixed/elastic height. The whole panel
-     scrolls when content (body + composer) exceeds max-height: 300px. */
-  overflow-y: visible;
+  flex: 1;
+  overflow-y: auto;
   padding: 14px 22px;
   display: flex;
   flex-direction: column;
@@ -696,7 +693,7 @@ html, body {
   display: flex;
   flex-direction: column;
 }
-/* ===== One rounded input shell — everything lives inside this card ===== */
+/* ===== One rounded input shell — capped at 300px tall, scrolls inside ===== */
 .chat-input-shell {
   border: 1px solid var(--rule);
   border-radius: 18px;
@@ -705,6 +702,10 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  /* Cap the input shell at 300px; if the textarea grows beyond that,
+     the shell scrolls internally. */
+  max-height: 300px;
+  overflow-y: auto;
   transition: border-color .15s ease, box-shadow .15s ease;
 }
 .chat-input-shell:focus-within {
@@ -743,7 +744,8 @@ html, body {
   text-overflow: ellipsis;
   color: var(--muted);
 }
-/* The textarea — borderless inside the shell, transparent background */
+/* The textarea — borderless, transparent; height follows content.
+   Outer shell caps total height at 300px and scrolls internally. */
 #chat-modal-input {
   width: 100%;
   resize: none;
@@ -756,7 +758,9 @@ html, body {
   color: var(--ink);
   outline: none;
   min-height: 28px;
-  max-height: 180px;
+  /* Scrollbar lives on the shell, not the textarea — so the input box
+     itself never shows its own scrollbar. */
+  overflow-y: hidden;
 }
 /* Toolbar inside the shell: model (left) + send (right) */
 .chat-input-toolbar {
@@ -2023,10 +2027,12 @@ html, body {
     cm.input.setSelectionRange(v.length, v.length);
   });
 
-  /* Auto-grow textarea */
+  /* No auto-resize on the textarea — content naturally grows inside.
+   The outer shell caps height at 300px and scrolls, so the textarea
+   doesn't need its own max-height. */
   function autoResize(el) {
-    el.style.height = 'auto';
-    el.style.height = Math.min(el.scrollHeight, 200) + 'px';
+    /* Reset to default — no manual height set, let content drive it. */
+    el.style.height = '';
   }
   cm.input.addEventListener('input', () => autoResize(cm.input));
   cm.input.addEventListener('keydown', e => {
