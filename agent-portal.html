@@ -724,13 +724,11 @@ html, body {
   color: var(--brand-ink);
   border-radius: 999px;
   border: none;
-  cursor: pointer;
-  transition: background .12s ease, color .12s ease, transform .12s ease;
+  /* Read-only label, not a button */
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
   flex: 0 0 auto;
-}
-.chat-input-preview .tag:hover {
-  background: var(--brand);
-  color: #fff;
 }
 .chat-input-preview .preview-text {
   flex: 1 1 auto;
@@ -1981,14 +1979,17 @@ html, body {
     /* Header: skill name + the user-editable prompt description */
     cm.title.textContent = skill.name;
     cm.sub.textContent = skill.prompt || skill.desc;
-    /* Inside the input shell: tag chips + a short prompt description */
+    /* Inside the input shell: read-only "title-style" placeholder prefix.
+       These chips + text are NOT editable, NOT clickable to insert anything.
+       They serve as a fixed prefix that frames how the user should respond.
+       Below them sits the editable textarea. */
     const tagsHtml = (skill.tags || [])
-      .map(t => `<button type="button" class="tag" data-tag="${escapeHtml(t)}">#${escapeHtml(t)}</button>`)
+      .map(t => `<span class="tag">#${escapeHtml(t)}</span>`)
       .join('');
-    const descText = (skill.prompt || skill.desc || '').slice(0, 60);
-    cm.tagsBox.innerHTML =
-      tagsHtml +
-      (descText ? `<span class="preview-text">${escapeHtml(descText)}${(skill.prompt || '').length > 60 ? '…' : ''}</span>` : '');
+    const promptText = skill.prompt || skill.desc || '';
+    const previewText = promptText.slice(0, 60) + (promptText.length > 60 ? '…' : '');
+    cm.tagsBox.innerHTML = tagsHtml +
+      (previewText ? `<span class="preview-text">${escapeHtml(previewText)}</span>` : '');
     /* Pre-fill input with the auto-generated prompt — user can edit freely */
     cm.input.value = skill.prompt || '';
     /* Reset body */
@@ -2016,15 +2017,12 @@ html, body {
     cm.tagsBox.innerHTML = '';
   }
 
-  /* Tag button → append tag to input (with leading space if needed) */
-  cm.tagsBox.addEventListener('click', e => {
-    const t = e.target.closest('.tag');
-    if (!t) return;
-    const tag = t.dataset.tag || t.textContent.replace(/^#/, '');
-    const cur = cm.input.value.trimEnd();
-    cm.input.value = (cur ? cur + ' ' : '') + '#' + tag;
+  /* The preview row above the textarea is read-only — no click handler needed.
+     A click anywhere on the preview just focuses the textarea. */
+  cm.tagsBox.addEventListener('click', () => {
     cm.input.focus();
-    autoResize(cm.input);
+    const v = cm.input.value;
+    cm.input.setSelectionRange(v.length, v.length);
   });
 
   /* Auto-grow textarea */
