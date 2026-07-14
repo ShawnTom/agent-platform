@@ -440,6 +440,9 @@ html, body {
   flex-direction: column;
   gap: 1px;
 }
+/* `hidden` must beat the flex `display` above so the menu is invisible
+   by default and only appears when JS toggles `hidden` off. */
+.ctrl-menu[hidden] { display: none; }
 .ctrl-menu-item {
   display: flex; align-items: center; gap: 10px;
   width: 100%;
