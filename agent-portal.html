@@ -1574,10 +1574,10 @@ html, body {
 <!-- ░░ Skills & Tools ░░ -->
 <section class="section page is-hidden" id="skills" data-page="skills" aria-label="技能与工具">
 
-  <!-- Hero: 探索全部海量技能 -->
+  <!-- Hero: 探索全部技能 -->
   <div class="skills-hero">
-    <h2>探索全部 <span class="count-pill">50000+</span> 海量技能</h2>
-    <p>根据热门场景，为你推荐 300+ 内置的最佳实践技能，你可以在这里直接挑选与使用。</p>
+    <h2>探索全部技能</h2>
+    <p>根据制造业和日常办公场景，为您推荐精选最佳实践技能，在这里您也可直接创建并管理自己的技能。</p>
 
     <div class="skills-search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -1593,6 +1593,7 @@ html, body {
     <div class="skills-tabs" role="tablist">
       <button class="skills-tab active" data-filter="recommend">推荐技能</button>
       <button class="skills-tab"        data-filter="all">全部技能</button>
+      <button class="skills-tab"        data-filter="favorites">我收藏的</button>
     </div>
     <div class="skills-controls">
       <button class="ctrl-btn" id="skills-category">
@@ -1816,6 +1817,7 @@ html, body {
   function render() {
     let list = SKILLS;
     if (filter === 'recommend') list = list.filter(s => s.recommend);
+    if (filter === 'favorites') list = list.filter(s => favs.has(s.id));
     if (query) {
       const q = query.toLowerCase();
       list = list.filter(s =>
@@ -1826,7 +1828,10 @@ html, body {
     }
 
     if (!list.length) {
-      grid.innerHTML = `<div class="skills-empty">没有找到与 “${escapeHtml(query)}” 相关的技能。</div>`;
+      const emptyMsg =
+        filter === 'favorites' ? '还没有收藏的技能，点击卡片上的星标收藏。' :
+        `没有找到与 “${escapeHtml(query)}” 相关的技能。`;
+      grid.innerHTML = `<div class="skills-empty">${emptyMsg}</div>`;
       return;
     }
 
