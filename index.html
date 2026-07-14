@@ -422,10 +422,18 @@ html, body {
   transition: border-color .15s ease, background .15s ease;
 }
 .ctrl-btn:hover { border-color: var(--ink); }
-.ctrl-btn svg { width: 14px; height: 14px; color: var(--muted); }
+.ctrl-btn svg { width: 14px; height: 14px; color: var(--muted); transition: transform .2s ease; }
 .ctrl-btn[aria-expanded="true"] { border-color: var(--ink); }
-/* Dropdown menu that hangs off the sort button */
-.ctrl-menu {
+.ctrl-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+/* ==========================================================================
+   Dropdown menu — robust pattern
+   ==========================================================================
+   - Container has class `is-open` set by JS, NOT the HTML `hidden` attribute
+     (avoids the CSS specificity trap that made the menu show on load).
+   - Positioned absolutely with the parent `.skills-toolbar` as its anchor.
+   - Animated in/out with opacity + translateY. */
+.dropdown {
   position: absolute;
   top: calc(100% + 6px);
   right: 18px;
@@ -439,11 +447,17 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 1px;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: opacity .15s ease, transform .15s ease;
 }
-/* `hidden` must beat the flex `display` above so the menu is invisible
-   by default and only appears when JS toggles `hidden` off. */
-.ctrl-menu[hidden] { display: none; }
-.ctrl-menu-item {
+.dropdown.is-open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.dropdown-item {
   display: flex; align-items: center; gap: 10px;
   width: 100%;
   padding: 8px 12px;
@@ -457,15 +471,17 @@ html, body {
   cursor: pointer;
   transition: background .12s ease;
 }
-.ctrl-menu-item:hover { background: var(--bg2); }
-.ctrl-menu-dot {
+.dropdown-item:hover { background: var(--bg2); }
+.dropdown-item:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
+.dropdown-dot {
   width: 10px; height: 10px;
   border-radius: 50%;
   border: 1.5px solid var(--muted2);
   flex: 0 0 auto;
+  transition: background .12s ease, border-color .12s ease;
 }
-.ctrl-menu-item.active { color: var(--ink); font-weight: 600; }
-.ctrl-menu-item.active .ctrl-menu-dot {
+.dropdown-item.is-active { color: var(--ink); font-weight: 600; }
+.dropdown-item.is-active .dropdown-dot {
   background: var(--brand);
   border-color: var(--brand);
   box-shadow: inset 0 0 0 2px var(--surface);
@@ -1659,21 +1675,21 @@ html, body {
       </button>
     </div>
     <!-- Sort dropdown menu -->
-    <div class="ctrl-menu" id="skills-sort-menu" role="menu" hidden>
-      <button class="ctrl-menu-item active" role="menuitem" data-sort="default">
-        <span class="ctrl-menu-dot"></span>默认排序
+    <div class="dropdown" id="skills-sort-menu" role="menu">
+      <button class="dropdown-item is-active" role="menuitem" data-sort="default">
+        <span class="dropdown-dot"></span>默认排序
       </button>
-      <button class="ctrl-menu-item" role="menuitem" data-sort="name">
-        <span class="ctrl-menu-dot"></span>按名称
+      <button class="dropdown-item" role="menuitem" data-sort="name">
+        <span class="dropdown-dot"></span>按名称
       </button>
-      <button class="ctrl-menu-item" role="menuitem" data-sort="uses">
-        <span class="ctrl-menu-dot"></span>按使用量
+      <button class="dropdown-item" role="menuitem" data-sort="uses">
+        <span class="dropdown-dot"></span>按使用量
       </button>
-      <button class="ctrl-menu-item" role="menuitem" data-sort="time-asc">
-        <span class="ctrl-menu-dot"></span>时间顺序
+      <button class="dropdown-item" role="menuitem" data-sort="time-asc">
+        <span class="dropdown-dot"></span>时间顺序
       </button>
-      <button class="ctrl-menu-item" role="menuitem" data-sort="time-desc">
-        <span class="ctrl-menu-dot"></span>时间倒序
+      <button class="dropdown-item" role="menuitem" data-sort="time-desc">
+        <span class="dropdown-dot"></span>时间倒序
       </button>
     </div>
   </div>
@@ -2040,60 +2056,65 @@ html, body {
   });
 
   /* =====================================================================
-   * Sort dropdown — toggle, pick option, dismiss on outside click.
+   * Sort dropdown — generic, robust pattern.
+   * Pattern:
+   *   - Trigger button (`#skills-sort`) with `aria-haspopup="menu"`,
+   *     `aria-expanded` toggled between "true" / "false".
+   *   - Menu element (`#skills-sort-menu`) with class `is-open` toggled.
+   *     CSS handles visibility via opacity / transform / pointer-events,
+   *     so the element is always in the DOM (no `hidden` attribute) and
+   *     can be transitioned in and out cleanly.
+   *   - One delegated `pointerdown` listener on `document` catches
+   *     outside clicks — works whether the trigger toggle happens on
+   *     `click` or `mousedown`, no race conditions.
+   *   - `Esc` closes the menu and returns focus to the trigger.
    * ===================================================================== */
   const sortBtn   = document.getElementById('skills-sort');
   const sortMenu  = document.getElementById('skills-sort-menu');
   const sortLabel = document.getElementById('skills-sort-label');
 
-  function openSortMenu() {
-    sortMenu.hidden = false;
-    sortBtn.setAttribute('aria-expanded', 'true');
-  }
-  function closeSortMenu() {
-    sortMenu.hidden = true;
-    sortBtn.setAttribute('aria-expanded', 'false');
-  }
+  function isMenuOpen() { return sortMenu.classList.contains('is-open'); }
+  function openMenu()   { sortMenu.classList.add('is-open'); sortBtn.setAttribute('aria-expanded', 'true'); }
+  function closeMenu()  { sortMenu.classList.remove('is-open'); sortBtn.setAttribute('aria-expanded', 'false'); }
+  function toggleMenu() { isMenuOpen() ? closeMenu() : openMenu(); }
 
-  /* Button click — toggles. Use `mousedown` so we run BEFORE the document
-     outside-click listener below (which is on `click`). */
-  sortBtn.addEventListener('mousedown', e => {
-    /* Prevent the upcoming `click` on document from immediately closing
-       the menu we just opened (or re-opening the menu we just closed). */
-    e.preventDefault();
-  });
+  /* Toggle on trigger click */
   sortBtn.addEventListener('click', e => {
-    if (sortMenu.hidden) openSortMenu();
-    else closeSortMenu();
+    e.stopPropagation();   // prevent the document listener from closing immediately
+    toggleMenu();
   });
 
-  /* Picking an option updates the sort and re-renders. */
+  /* Pick a sort option */
   sortMenu.addEventListener('click', e => {
-    const item = e.target.closest('.ctrl-menu-item');
+    const item = e.target.closest('.dropdown-item');
     if (!item) return;
     const next = item.dataset.sort;
     if (next && next !== sort) {
       sort = next;
       sortLabel.textContent = item.textContent.trim();
-      sortMenu.querySelectorAll('.ctrl-menu-item').forEach(x =>
-        x.classList.toggle('active', x === item));
+      sortMenu.querySelectorAll('.dropdown-item').forEach(x =>
+        x.classList.toggle('is-active', x === item));
     }
-    closeSortMenu();
+    closeMenu();
     render();
+    sortBtn.focus();
   });
 
-  /* Click outside the button OR the menu closes it.
-     We explicitly skip clicks that originated on the button itself. */
-  document.addEventListener('click', e => {
-    if (sortMenu.hidden) return;
-    if (sortBtn.contains(e.target)) return;     // button handles its own toggle
-    if (sortMenu.contains(e.target)) return;    // menu handled its own item click
-    closeSortMenu();
+  /* Close on outside click. Uses pointerdown so it fires BEFORE the click
+     that would re-open the menu, eliminating race conditions. */
+  document.addEventListener('pointerdown', e => {
+    if (!isMenuOpen()) return;
+    if (sortBtn.contains(e.target))   return;  // button handles itself
+    if (sortMenu.contains(e.target))  return;  // menu handled its own click
+    closeMenu();
   });
 
-  /* ESC closes the menu too. */
-  window.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && !sortMenu.hidden) closeSortMenu();
+  /* Close on Escape, return focus to trigger */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && isMenuOpen()) {
+      closeMenu();
+      sortBtn.focus();
+    }
   });
 
   /* Initial render */
