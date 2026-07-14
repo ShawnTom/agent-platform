@@ -2017,6 +2017,7 @@ html, body {
     cm.body.innerHTML = `<div class="chat-msg empty">会话已开始，发送第一条消息吧。</div>`;
     /* Reset model to default (千问) */
     cm.model.value = 'qwen3-max';
+    fitModelSelect();
     cm.root.classList.add('is-open');
     cm.root.setAttribute('aria-hidden', 'false');
     /* Autofocus + cursor at end so user can immediately edit.
@@ -2061,6 +2062,35 @@ html, body {
     cm.input.addEventListener('input', () => autoResize(cm.input));
     /* Also resize after the default prompt is seeded on open. */
     cm.input.addEventListener('focus', () => autoResize(cm.input));
+
+    /* =====================================================================
+     * Model select — width follows the currently-selected option text
+     * (not the longest option in the list). We measure with a hidden
+     * mirror element and apply the measured width back to the select.
+     * ===================================================================== */
+    const modelSelect = cm.model;
+    const sizer = document.createElement('span');
+    sizer.setAttribute('aria-hidden', 'true');
+    sizer.style.cssText =
+      'position:absolute; visibility:hidden; white-space:pre;' +
+      'left:-9999px; top:-9999px; pointer-events:none;';
+    // Mirror the select's typographic style so the measurement is accurate.
+    const cs = window.getComputedStyle(modelSelect);
+    sizer.style.font = cs.font;
+    document.body.appendChild(sizer);
+
+    function fitModelSelect() {
+      const opt = modelSelect.options[modelSelect.selectedIndex];
+      sizer.textContent = opt ? opt.textContent : modelSelect.value;
+      // 2px slack so the caret doesn't kiss the right edge.
+      const w = sizer.getBoundingClientRect().width + 2;
+      modelSelect.style.width = Math.ceil(w) + 'px';
+    }
+    modelSelect.addEventListener('change', fitModelSelect);
+    /* Window font load can shift widths after first paint — refit then too. */
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(fitModelSelect);
+    }
   cm.input.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
