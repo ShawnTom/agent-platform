@@ -1434,40 +1434,186 @@ html, body {
 
   <div class="agents">
 
-    <!-- 1 · 知识助手 (featured) — 语义化插图：搜索框 + 答案气泡 -->
+    <!-- 1 · 知识助手 (featured) — 语义化插图：提问 + 风轮叶片图纸 + 辅助骨架图 -->
     <div class="agent-card" onclick="void(0)">
       <div class="agent-illu">
         <svg viewBox="0 0 400 168" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
           <!-- decorative green lines bg -->
-          <g fill="none" stroke="#00a651" stroke-width="0.7" opacity="0.45">
+          <g fill="none" stroke="#00a651" stroke-width="0.7" opacity="0.40">
             <path d="M0,30 Q100,90 200,70 T400,40"/>
             <path d="M0,60 Q120,120 220,100 T400,80"/>
             <path d="M0,90 Q140,150 240,130 T400,120"/>
           </g>
-          <!-- search input -->
-          <g transform="translate(60,46)">
-            <rect width="280" height="42" rx="21" fill="#faf9f5" stroke="#d9d6cc" stroke-width="1"/>
-            <g transform="translate(18,21)">
-              <path d="M0,-2 L4,-6 L8,-2 L4,2 Z" fill="#00a651"/>
-              <circle cx="4" cy="0" r="1" fill="#fff"/>
+
+          <!-- ░░ 左侧：用户提问气泡 ░░ -->
+          <g transform="translate(14,18)">
+            <!-- 用户头像 -->
+            <circle cx="10" cy="10" r="9" fill="#fff" stroke="#d9d6cc" stroke-width="1"/>
+            <path d="M3,17 a7,7 0 0 1 14,0" fill="#bcbab0"/>
+            <circle cx="10" cy="9" r="3" fill="#bcbab0"/>
+            <!-- 提问气泡 -->
+            <g transform="translate(26,2)">
+              <rect width="138" height="36" rx="10" fill="#fff" stroke="#d9d6cc" stroke-width="1"/>
+              <path d="M-2,8 L4,12 L-2,16 Z" fill="#fff" stroke="#d9d6cc" stroke-width="1"/>
+              <!-- 模拟两行文本条 -->
+              <rect x="10" y="10" width="118" height="4" rx="2" fill="#3a3a36"/>
+              <rect x="10" y="20" width="92"  height="4" rx="2" fill="#bcbab0"/>
+              <!-- 真实文本 -->
+              <text x="10" y="8" font-family="InstrumentSans,sans-serif" font-size="7" fill="#8a8a82">帮我查一下风轮叶片</text>
+              <text x="10" y="15" font-family="InstrumentSans,sans-serif" font-size="7" fill="#8a8a82">的制造图纸</text>
             </g>
-            <text x="42" y="26" font-family="InstrumentSans,sans-serif" font-size="13" fill="#8a8a82">Ask anything from your knowledge base…</text>
-            <circle cx="258" cy="21" r="9" fill="none" stroke="#bcbab0" stroke-width="1"/>
-            <path d="M264,27 L270,33" stroke="#bcbab0" stroke-width="1" fill="none"/>
           </g>
-          <!-- answer bubble -->
-          <g transform="translate(80,104)">
-            <rect width="220" height="36" rx="10" fill="#fff" stroke="#d9d6cc" stroke-width="1"/>
-            <circle cx="18" cy="18" r="6" fill="#00a651"/>
-            <path d="M15,18 L17,20 L21,16" stroke="#fff" stroke-width="1.4" fill="none"/>
-            <rect x="34" y="11" width="160" height="5" rx="2.5" fill="#e8e5d8"/>
-            <rect x="34" y="22" width="120" height="5" rx="2.5" fill="#e8e5d8"/>
-            <rect x="34" y="30" width="0" height="0"/>
+
+          <!-- ░░ 助手回答气泡 ░░ -->
+          <g transform="translate(14,68)">
+            <circle cx="10" cy="10" r="9" fill="#00a651"/>
+            <path d="M7,18 a7,7 0 0 1 14,0" fill="#00733a"/>
+            <circle cx="10" cy="9" r="3" fill="#fff"/>
+            <g transform="translate(26,2)">
+              <rect width="148" height="42" rx="10" fill="#faf9f5" stroke="#00a651" stroke-width="1"/>
+              <circle cx="14" cy="13" r="4" fill="#00a651"/>
+              <path d="M12,13 l1.5,1.5 l3,-3" stroke="#fff" stroke-width="1.2" fill="none"/>
+              <text x="24" y="13" font-family="InstrumentSans,sans-serif" font-size="6.5" fill="#0e6b3d">已找到 1 份相关图纸与说明</text>
+              <!-- 装饰文本条 -->
+              <rect x="10" y="22" width="130" height="3" rx="1.5" fill="#d4d2c5"/>
+              <rect x="10" y="29" width="100" height="3" rx="1.5" fill="#d4d2c5"/>
+              <rect x="10" y="36" width="116" height="3" rx="1.5" fill="#d4d2c5"/>
+            </g>
           </g>
-          <!-- source chip -->
-          <g transform="translate(310,114)">
-            <rect width="60" height="20" rx="10" fill="#fff" stroke="#00a651" stroke-width="1"/>
-            <text x="30" y="14" font-family="InstrumentSans,sans-serif" font-size="10" fill="#0e6b3d" text-anchor="middle">Guide.md</text>
+
+          <!-- ░░ 中央：风轮叶片设计图纸 ░░ -->
+          <g transform="translate(196,16)">
+            <!-- 图纸边框 -->
+            <rect width="124" height="136" rx="6" fill="#fff" stroke="#d9d6cc" stroke-width="1"/>
+            <!-- 图纸标题栏 -->
+            <rect x="0" y="0" width="124" height="12" rx="6" fill="#f3f6fa"/>
+            <rect x="0" y="6" width="124" height="6" fill="#f3f6fa"/>
+            <rect x="6" y="4" width="42" height="3" rx="1.5" fill="#bcbab0"/>
+            <rect x="6" y="9" width="28" height="2" rx="1"   fill="#e0ddd0"/>
+            <text x="118" y="9" font-family="InstrumentSans,sans-serif" font-size="4.5" fill="#8a8a82" text-anchor="end">WB-2026 · Rev.04</text>
+            <!-- 图纸网格 (淡淡的辅助线) -->
+            <g stroke="#eae7da" stroke-width="0.3" stroke-dasharray="1 1">
+              <line x1="8"   y1="14" x2="8"   y2="118"/>
+              <line x1="62"  y1="14" x2="62"  y2="118"/>
+              <line x1="116" y1="14" x2="116" y2="118"/>
+              <line x1="8"  y1="14"  x2="116" y2="14"/>
+              <line x1="8"  y1="50"  x2="116" y2="50"/>
+              <line x1="8"  y1="84"  x2="116" y2="84"/>
+              <line x1="8"  y1="118" x2="116" y2="118"/>
+            </g>
+
+            <!-- 风轮叶片俯视图 (主图) -->
+            <g transform="translate(62,52)" fill="none" stroke="#1f9f5b" stroke-width="1" stroke-linejoin="round" stroke-linecap="round">
+              <!-- 中心轮毂 -->
+              <circle cx="0" cy="0" r="4" fill="#1f9f5b" stroke="none"/>
+              <circle cx="0" cy="0" r="2" fill="#fff" stroke="none"/>
+              <!-- 三支叶片 -->
+              <path d="M0,0 Q12,-3 18,-16 Q22,-22 22,-26 Q14,-22 6,-12 Q2,-6 0,0 Z" fill="#e9f5ee"/>
+              <g transform="rotate(120)">
+                <path d="M0,0 Q12,-3 18,-16 Q22,-22 22,-26 Q14,-22 6,-12 Q2,-6 0,0 Z" fill="#e9f5ee"/>
+              </g>
+              <g transform="rotate(240)">
+                <path d="M0,0 Q12,-3 18,-16 Q22,-22 22,-26 Q14,-22 6,-12 Q2,-6 0,0 Z" fill="#e9f5ee"/>
+              </g>
+              <!-- 轮廓描边 -->
+              <path d="M0,0 Q12,-3 18,-16 Q22,-22 22,-26 Q14,-22 6,-12 Q2,-6 0,0 Z"/>
+              <g transform="rotate(120)">
+                <path d="M0,0 Q12,-3 18,-16 Q22,-22 22,-26 Q14,-22 6,-12 Q2,-6 0,0 Z"/>
+              </g>
+              <g transform="rotate(240)">
+                <path d="M0,0 Q12,-3 18,-16 Q22,-22 22,-26 Q14,-22 6,-12 Q2,-6 0,0 Z"/>
+              </g>
+              <!-- 叶片刻线 (内部结构示意) -->
+              <g stroke="#7bd0a3" stroke-width="0.5" stroke-dasharray="1.5 1">
+                <path d="M2,-1 Q10,-6 16,-18"/>
+                <g transform="rotate(120)"><path d="M2,-1 Q10,-6 16,-18"/></g>
+                <g transform="rotate(240)"><path d="M2,-1 Q10,-6 16,-18"/></g>
+              </g>
+            </g>
+
+            <!-- 叶片侧视图 (小图，右下) -->
+            <g transform="translate(98,98)" fill="none" stroke="#3a3a36" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round">
+              <!-- 叶根 -->
+              <circle cx="0" cy="0" r="3" fill="#bcbab0" stroke="#8a8a82"/>
+              <!-- 叶片剖面 -->
+              <path d="M2,-2 Q12,-4 22,-1 Q26,0 22,1 Q12,4 2,2 Z" fill="#f0f8f4"/>
+              <!-- 最大厚度弦线 -->
+              <line x1="6" y1="-3" x2="6" y2="3" stroke="#e58a2a" stroke-width="0.5" stroke-dasharray="1 1"/>
+              <!-- 尺寸标注 -->
+              <line x1="-2" y1="-7" x2="26" y2="-7" stroke="#bcbab0" stroke-width="0.3"/>
+              <line x1="-2" y1="-7" x2="-2" y2="-4" stroke="#bcbab0" stroke-width="0.3"/>
+              <line x1="26" y1="-7" x2="26" y2="-4" stroke="#bcbab0" stroke-width="0.3"/>
+              <text x="12" y="-8" font-family="InstrumentSans,sans-serif" font-size="3.5" fill="#8a8a82" text-anchor="middle">L=860</text>
+            </g>
+
+            <!-- 标注：旋转方向 -->
+            <g transform="translate(28,28)" fill="none" stroke="#1f9f5b" stroke-width="0.6">
+              <path d="M0,0 a8,8 0 1 1 0.01,0" />
+              <path d="M-1,-1 l2,1 l1,-2" stroke-linecap="round"/>
+            </g>
+            <text x="22" y="46" font-family="InstrumentSans,sans-serif" font-size="4.5" fill="#1f9f5b">旋转方向</text>
+
+            <!-- 比例尺 -->
+            <g transform="translate(8,124)">
+              <rect width="20" height="3" fill="#3a3a36"/>
+              <rect x="0" y="0" width="5" height="3" fill="#fff" stroke="#3a3a36" stroke-width="0.3"/>
+              <rect x="10" y="0" width="5" height="3" fill="#fff" stroke="#3a3a36" stroke-width="0.3"/>
+              <text x="22" y="3" font-family="InstrumentSans,sans-serif" font-size="3" fill="#8a8a82">0 — 1m</text>
+            </g>
+          </g>
+
+          <!-- ░░ 右侧：辅助骨架图 (工艺 / 检测 / 文档) ░░ -->
+          <g transform="translate(326,18)">
+            <!-- 骨架图 1: 工艺流程 -->
+            <g transform="translate(0,0)">
+              <rect width="62" height="40" rx="5" fill="#fff" stroke="#d9d6cc" stroke-width="0.8"/>
+              <rect x="4" y="4" width="22" height="3" rx="1" fill="#3a3a36"/>
+              <rect x="4" y="10" width="14" height="2" rx="1" fill="#bcbab0"/>
+              <!-- 工艺节点 -->
+              <g transform="translate(4,18)">
+                <circle cx="6" cy="6" r="3.5" fill="#1f9f5b"/>
+                <path d="M4.5,6 l1,1 l2,-2" stroke="#fff" stroke-width="0.7" fill="none"/>
+                <rect x="13" y="4" width="20" height="2.5" rx="1" fill="#bcbab0"/>
+                <rect x="13" y="8" width="14" height="2" rx="1" fill="#e0ddd0"/>
+              </g>
+              <g transform="translate(4,30)">
+                <circle cx="6" cy="6" r="3.5" fill="#fff" stroke="#1f9f5b" stroke-width="0.7"/>
+                <rect x="13" y="4" width="22" height="2.5" rx="1" fill="#bcbab0"/>
+                <rect x="13" y="8" width="10" height="2" rx="1" fill="#e0ddd0"/>
+              </g>
+            </g>
+
+            <!-- 骨架图 2: 检测数据 -->
+            <g transform="translate(0,46)">
+              <rect width="62" height="40" rx="5" fill="#fff" stroke="#d9d6cc" stroke-width="0.8"/>
+              <rect x="4" y="4" width="14" height="3" rx="1" fill="#3a3a36"/>
+              <!-- mini 折线 -->
+              <g transform="translate(6,12)">
+                <rect width="50" height="22" rx="2" fill="#faf9f5"/>
+                <g stroke="#eae7da" stroke-width="0.3">
+                  <line x1="0" y1="6"  x2="50" y2="6"/>
+                  <line x1="0" y1="12" x2="50" y2="12"/>
+                  <line x1="0" y1="18" x2="50" y2="18"/>
+                </g>
+                <polyline points="2,16 10,12 18,14 26,6 34,10 42,4 48,8" fill="none" stroke="#e58a2a" stroke-width="0.8"/>
+                <circle cx="26" cy="6" r="1.2" fill="#e58a2a"/>
+              </g>
+            </g>
+
+            <!-- 骨架图 3: 文档/规范 -->
+            <g transform="translate(0,92)">
+              <rect width="62" height="40" rx="5" fill="#fff" stroke="#d9d6cc" stroke-width="0.8"/>
+              <rect x="4" y="4" width="18" height="3" rx="1" fill="#3a3a36"/>
+              <!-- 文档图标 -->
+              <g transform="translate(6,14)">
+                <path d="M0,0 h26 v18 h-26 z" fill="#faf9f5" stroke="#bcbab0" stroke-width="0.4"/>
+                <path d="M20,0 l6,6 v12 h-6 z" fill="#f3f6fa" stroke="#bcbab0" stroke-width="0.4"/>
+                <path d="M20,0 v6 h6" fill="none" stroke="#bcbab0" stroke-width="0.4"/>
+                <rect x="3"  y="4"  width="14" height="1.5" rx="0.75" fill="#bcbab0"/>
+                <rect x="3"  y="8"  width="18" height="1.5" rx="0.75" fill="#bcbab0"/>
+                <rect x="3"  y="12" width="12" height="1.5" rx="0.75" fill="#bcbab0"/>
+              </g>
+            </g>
           </g>
         </svg>
       </div>
