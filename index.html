@@ -865,16 +865,21 @@ html, body {
   -webkit-box-orient: vertical;
 }
 
-/* Card actions: hidden by default, shown on hover.
-   Once a skill is favorited, the entire action group stays visible so the
-   user can always see the bookmark state at a glance. */
+/* Card actions:
+   - Download button (.js-dl): hidden by default, shown only on card hover.
+   - Favorite button (.js-fav): same as download while NOT bookmarked.
+     Once bookmarked (.faved), it stays visible always so users can see
+     their bookmark state at a glance.
+   Visual order in the DOM: download on the LEFT, favorite on the RIGHT. */
 .skill-actions {
   display: flex; gap: 6px;
-  opacity: 0;
-  transition: opacity .15s ease;
 }
-.skill-card:hover .skill-actions,
-.skill-card.has-fav .skill-actions { opacity: 1; }
+.skill-actions .icon-btn {
+  opacity: 0;
+  transition: opacity .15s ease, background .15s ease, color .15s ease;
+}
+.skill-card:hover .skill-actions .icon-btn,
+.skill-actions .icon-btn.faved { opacity: 1; }
 .icon-btn {
   width: 30px; height: 30px;
   border: 1px solid var(--rule);
@@ -1839,7 +1844,7 @@ html, body {
     }
 
     grid.innerHTML = list.map(s => `
-      <article class="skill-card ${favs.has(s.id) ? 'has-fav' : ''}" data-id="${s.id}">
+      <article class="skill-card" data-id="${s.id}">
         <div class="skill-icon" style="background:${s.bg}">${s.icon}</div>
         <div class="skill-body">
           <div class="skill-title-row">
@@ -1849,17 +1854,17 @@ html, body {
           <p class="skill-desc">${escapeHtml(s.desc)}</p>
         </div>
         <div class="skill-actions">
+          <button class="icon-btn js-dl" title="下载" aria-label="下载">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/>
+            </svg>
+          </button>
           <button class="icon-btn js-fav ${favs.has(s.id) ? 'faved' : ''}"
                   title="${favs.has(s.id) ? '取消收藏' : '收藏'}" aria-label="收藏">
             <svg viewBox="0 0 24 24" fill="${favs.has(s.id) ? 'currentColor' : 'none'}"
                  stroke="currentColor" stroke-width="2" stroke-linejoin="round">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/>
-            </svg>
-          </button>
-          <button class="icon-btn js-dl" title="下载" aria-label="下载">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/>
             </svg>
           </button>
         </div>
@@ -1877,16 +1882,13 @@ html, body {
   grid.addEventListener('click', e => {
     const favBtn = e.target.closest('.js-fav');
     if (favBtn) {
-      const card = favBtn.closest('.skill-card');
-      const id = card.dataset.id;
+      const id = favBtn.closest('.skill-card').dataset.id;
       if (favs.has(id)) {
         favs.delete(id);
         favBtn.classList.remove('faved');
-        card.classList.remove('has-fav');
       } else {
         favs.add(id);
         favBtn.classList.add('faved');
-        card.classList.add('has-fav');
       }
       saveFavs();
       return;
