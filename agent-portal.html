@@ -686,98 +686,127 @@ html, body {
 }
 .chat-modal-composer {
   border-top: 1px solid var(--rule-soft);
-  padding: 12px 18px 14px;
+  padding: 12px 18px 16px;
   background: var(--surface);
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
-/* Tags row sits between body and input — context chips */
-.chat-modal-tags {
+/* ===== One rounded input shell — everything lives inside this card ===== */
+.chat-input-shell {
+  border: 1px solid var(--rule);
+  border-radius: 18px;
+  background: var(--bg);
+  padding: 12px 14px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.chat-input-shell:focus-within {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(21, 101, 192, .12);
+}
+/* Top of shell: tag chips + prompt description (single horizontal flow) */
+.chat-input-preview {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 6px;
   min-width: 0;
+  font-size: 13px;
+  color: var(--ink2);
+  line-height: 1.55;
 }
-.chat-modal-tags .tag {
+.chat-input-preview .tag {
   font-size: 11px;
-  padding: 3px 8px;
-  background: var(--bg2);
-  color: var(--muted);
+  padding: 3px 9px;
+  background: var(--brand-soft);
+  color: var(--brand-ink);
   border-radius: 999px;
   border: none;
   cursor: pointer;
-  transition: background .12s ease, color .12s ease;
+  transition: background .12s ease, color .12s ease, transform .12s ease;
+  flex: 0 0 auto;
 }
-.chat-modal-tags .tag:hover { background: var(--accent-soft); color: var(--accent-ink); }
+.chat-input-preview .tag:hover {
+  background: var(--brand);
+  color: #fff;
+}
+.chat-input-preview .preview-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--muted);
+}
+/* The textarea — borderless inside the shell, transparent background */
 #chat-modal-input {
   width: 100%;
   resize: none;
-  border: 1px solid var(--rule);
-  border-radius: 10px;
-  padding: 9px 12px;
+  border: none;
+  background: transparent;
+  padding: 4px 4px 6px;
   font-family: inherit;
   font-size: 14px;
   line-height: 1.5;
   color: var(--ink);
-  background: var(--bg);
   outline: none;
-  transition: border-color .15s ease, box-shadow .15s ease;
-  min-height: 48px;
+  min-height: 28px;
   max-height: 180px;
 }
-#chat-modal-input:focus {
-  border-color: var(--brand);
-  box-shadow: 0 0 0 3px rgba(21, 101, 192, .12);
-}
-/* Bottom row: model on the LEFT, send button on the RIGHT */
-.chat-modal-foot {
+/* Toolbar inside the shell: model (left) + send (right) */
+.chat-input-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  padding-top: 4px;
+  border-top: 1px solid var(--rule-soft);
 }
+.chat-input-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .chat-model {
   height: 30px;
-  border: 1px solid var(--rule);
-  background: var(--surface);
+  border: 1px solid transparent;
+  background: transparent;
   color: var(--ink);
-  border-radius: 6px;
-  padding: 0 28px 0 10px;
+  border-radius: 8px;
+  padding: 0 26px 0 10px;
   font-family: inherit;
   font-size: 12.5px;
   cursor: pointer;
   outline: none;
-  transition: border-color .15s ease;
+  transition: background .15s ease, border-color .15s ease;
   appearance: none;
   -webkit-appearance: none;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%239a9a93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
   background-repeat: no-repeat;
-  background-position: right 10px center;
+  background-position: right 8px center;
 }
-.chat-model:hover, .chat-model:focus { border-color: var(--brand); }
+.chat-model:hover { background: var(--bg2); border-color: var(--rule); }
+.chat-model:focus  { background: var(--bg2); border-color: var(--rule); }
 .chat-model optgroup { font-style: normal; font-weight: 600; color: var(--muted); }
-.chat-model option { color: var(--ink); font-weight: 400; }
-/* Smaller round send button */
+.chat-model option  { color: var(--ink); font-weight: 400; }
+/* Send button — round, smaller, blue accent */
 .chat-send {
-  height: 30px;
-  width: 30px;
+  height: 32px;
+  width: 32px;
   padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--ink);
+  background: var(--brand);
   color: #fff;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--brand);
   border-radius: 50%;
   cursor: pointer;
-  transition: background .15s ease, transform .12s ease;
+  transition: background .15s ease, transform .12s ease, opacity .15s ease;
   flex: 0 0 auto;
 }
-.chat-send:hover { background: var(--brand); border-color: var(--brand); }
+.chat-send:hover { background: var(--brand-ink); border-color: var(--brand-ink); }
 .chat-send:active { transform: scale(.94); }
-.chat-send svg { width: 13px; height: 13px; }
-.chat-send:disabled { opacity: .4; cursor: not-allowed; }
+.chat-send svg { width: 14px; height: 14px; }
+.chat-send:disabled { opacity: .35; cursor: not-allowed; }
 
 .skill-icon {
   width: 44px; height: 44px;
@@ -1639,33 +1668,39 @@ html, body {
     </div>
 
     <div class="chat-modal-composer">
-      <!-- Tags + prompt pre-fill area, shown above the input as context -->
-      <div class="chat-modal-tags" id="chat-modal-tags"></div>
+      <!-- One rounded input shell containing: tags + prompt preview + textarea -->
+      <div class="chat-input-shell">
+        <!-- Tag chips + prompt description, sit at the top of the shell -->
+        <div class="chat-input-preview" id="chat-modal-tags"></div>
 
-      <textarea id="chat-modal-input" placeholder="输入消息…（Shift+Enter 换行，Enter 发送）" rows="2"></textarea>
+        <!-- The editable textarea (auto-resizing) -->
+        <textarea id="chat-modal-input" placeholder="输入消息…（Shift+Enter 换行，Enter 发送）" rows="1"></textarea>
 
-      <!-- Bottom row: model picker (left) + send button (right) -->
-      <div class="chat-modal-foot">
-        <select class="chat-model" id="chat-modal-model" aria-label="选择模型">
-          <optgroup label="千问（主）">
-            <option value="qwen3-max"      selected>Qwen3 Max</option>
-            <option value="qwen3-plus">Qwen3 Plus</option>
-            <option value="qwen-turbo">Qwen Turbo</option>
-            <option value="qwen-coder">Qwen Coder</option>
-          </optgroup>
-          <optgroup label="其他模型">
-            <option value="gpt-4o">GPT-4o</option>
-            <option value="gpt-4o-mini">GPT-4o mini</option>
-            <option value="claude-sonnet">Claude Sonnet</option>
-            <option value="claude-haiku">Claude Haiku</option>
-            <option value="deepseek-v3">DeepSeek V3</option>
-          </optgroup>
-        </select>
-        <button class="chat-send" id="chat-modal-send" aria-label="发送">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14M13 6l6 6-6 6"/>
-          </svg>
-        </button>
+        <!-- Bottom toolbar: model picker (left) + send button (right) -->
+        <div class="chat-input-toolbar">
+          <div class="chat-input-left">
+            <select class="chat-model" id="chat-modal-model" aria-label="选择模型">
+              <optgroup label="千问（主）">
+                <option value="qwen3-max"      selected>Qwen3 Max</option>
+                <option value="qwen3-plus">Qwen3 Plus</option>
+                <option value="qwen-turbo">Qwen Turbo</option>
+                <option value="qwen-coder">Qwen Coder</option>
+              </optgroup>
+              <optgroup label="其他模型">
+                <option value="gpt-4o">GPT-4o</option>
+                <option value="gpt-4o-mini">GPT-4o mini</option>
+                <option value="claude-sonnet">Claude Sonnet</option>
+                <option value="claude-haiku">Claude Haiku</option>
+                <option value="deepseek-v3">DeepSeek V3</option>
+              </optgroup>
+            </select>
+          </div>
+          <button class="chat-send" id="chat-modal-send" aria-label="发送">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 19V5M5 12l7-7 7 7"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -1946,10 +1981,14 @@ html, body {
     /* Header: skill name + the user-editable prompt description */
     cm.title.textContent = skill.name;
     cm.sub.textContent = skill.prompt || skill.desc;
-    /* Tags — clicking inserts the tag into the input */
-    cm.tagsBox.innerHTML = (skill.tags || [])
+    /* Inside the input shell: tag chips + a short prompt description */
+    const tagsHtml = (skill.tags || [])
       .map(t => `<button type="button" class="tag" data-tag="${escapeHtml(t)}">#${escapeHtml(t)}</button>`)
       .join('');
+    const descText = (skill.prompt || skill.desc || '').slice(0, 60);
+    cm.tagsBox.innerHTML =
+      tagsHtml +
+      (descText ? `<span class="preview-text">${escapeHtml(descText)}${(skill.prompt || '').length > 60 ? '…' : ''}</span>` : '');
     /* Pre-fill input with the auto-generated prompt — user can edit freely */
     cm.input.value = skill.prompt || '';
     /* Reset body */
