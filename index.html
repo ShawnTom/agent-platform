@@ -692,6 +692,11 @@ html, body {
   background: var(--surface);
   display: flex;
   flex-direction: column;
+  /* The whole composer area grows with input up to 300px, then scrolls
+     internally so it never pushes the rest of the modal out. */
+  max-height: 300px;
+  overflow-y: auto;
+  flex: 0 0 auto;
 }
 /* ===== One rounded input shell — capped at 300px tall, scrolls inside ===== */
 .chat-input-shell {
