@@ -165,6 +165,17 @@ html, body {
   border-color: var(--ink);
   color: var(--ink);
 }
+/* Ghost button — outline only, transparent background. */
+.btn.ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--rule);
+  font-weight: 600;
+}
+.btn.ghost:hover {
+  background: var(--bg2);
+  border-color: var(--ink);
+}
 .btn .arr { font-size: 11px; opacity: .9; }
 
 /* ---------- Hero ---------- */
@@ -444,6 +455,298 @@ html, body {
     0 10px 24px -12px rgba(0, 166, 81, .22),
     0 3px 8px rgba(0, 0, 0, .04);
 }
+
+/* ==========================================================================
+   Modals — Skill Detail + Chat
+   ========================================================================== */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.modal.is-open { display: flex; }
+.modal-mask {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 18, 14, .42);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: modal-fade .18s ease both;
+}
+@keyframes modal-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modal-rise { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
+
+.modal-panel {
+  position: relative;
+  background: var(--surface);
+  border-radius: 16px;
+  border: 1px solid var(--rule);
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, .25);
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  animation: modal-rise .22s cubic-bezier(.2, .8, .2, 1) both;
+}
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.modal-close:hover { background: var(--bg2); color: var(--ink); border-color: var(--rule); }
+.modal-close svg { width: 16px; height: 16px; }
+
+/* ---- Skill detail modal ---- */
+.skill-modal-panel {
+  width: 560px;
+  max-width: 100%;
+  padding: 32px 32px 24px;
+}
+.skill-modal-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding-right: 36px;
+}
+.skill-modal-icon {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  flex: 0 0 auto;
+}
+.skill-modal-meta h3 {
+  font-family: 'InstrumentSans', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.skill-modal-sub {
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.skill-modal-sub .dot { color: var(--rule); }
+.skill-modal-sub .skill-cat {
+  background: var(--bg2);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+.skill-modal-sub .star { color: var(--accent); }
+.skill-modal-desc {
+  color: var(--ink2);
+  font-size: 14.5px;
+  line-height: 1.65;
+  margin: 0 0 22px;
+}
+.skill-modal-section { margin-bottom: 18px; }
+.skill-modal-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.skill-modal-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.skill-modal-tags .tag {
+  font-size: 12px;
+  padding: 4px 10px;
+  background: var(--bg2);
+  color: var(--muted);
+  border-radius: 999px;
+}
+.skill-modal-prompt {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink2);
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: 'InstrumentSans', sans-serif;
+}
+.skill-modal-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule-soft);
+}
+.skill-modal-foot .btn .arr { font-size: 12px; }
+
+/* ---- Chat modal ---- */
+.chat-modal-panel {
+  width: 720px;
+  max-width: 100%;
+  height: min(720px, calc(100vh - 48px));
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+.chat-modal-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--rule-soft);
+  padding-right: 56px;
+}
+.chat-modal-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex: 0 0 auto;
+}
+.chat-modal-head h3 {
+  font-family: 'InstrumentSans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 2px;
+  color: var(--ink);
+}
+.chat-modal-sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+.chat-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--bg);
+}
+.chat-msg {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.chat-msg.user {
+  align-self: flex-end;
+  background: var(--brand);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.chat-msg.assistant {
+  align-self: flex-start;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-bottom-left-radius: 4px;
+}
+.chat-msg.empty {
+  align-self: center;
+  color: var(--muted);
+  font-style: italic;
+  background: transparent;
+  border: none;
+  padding: 32px 0;
+}
+.chat-modal-composer {
+  border-top: 1px solid var(--rule-soft);
+  padding: 14px 18px 16px;
+  background: var(--surface);
+}
+#chat-modal-input {
+  width: 100%;
+  resize: none;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--bg);
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+  min-height: 56px;
+  max-height: 200px;
+}
+#chat-modal-input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(21, 101, 192, .12);
+}
+.chat-modal-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.chat-modal-tags { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+.chat-modal-tags .tag {
+  font-size: 11px;
+  padding: 3px 8px;
+  background: var(--bg2);
+  color: var(--muted);
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: background .12s ease, color .12s ease;
+}
+.chat-modal-tags .tag:hover { background: var(--accent-soft); color: var(--accent-ink); }
+.chat-modal-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+.chat-model {
+  height: 36px;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 0 10px;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color .15s ease;
+}
+.chat-model:hover, .chat-model:focus { border-color: var(--brand); }
+.chat-send {
+  height: 36px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.chat-send svg { width: 14px; height: 14px; }
+.chat-send:disabled { opacity: .5; cursor: not-allowed; }
+
 .skill-icon {
   width: 44px; height: 44px;
   border-radius: 10px;
@@ -1234,6 +1537,99 @@ html, body {
   </div>
 </footer>
 
+<!-- ░░ Skill Detail Modal ░░ -->
+<div class="modal" id="skill-modal" aria-hidden="true" role="dialog" aria-labelledby="skill-modal-title">
+  <div class="modal-mask" data-modal-close></div>
+  <div class="modal-panel skill-modal-panel">
+    <button class="modal-close" data-modal-close aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M6 6l12 12M18 6L6 18"/>
+      </svg>
+    </button>
+
+    <div class="skill-modal-head">
+      <div class="skill-modal-icon" id="skill-modal-icon"></div>
+      <div class="skill-modal-meta">
+        <h3 id="skill-modal-title"></h3>
+        <div class="skill-modal-sub">
+          <span class="skill-cat" id="skill-modal-cat"></span>
+          <span class="dot">·</span>
+          <span><span class="star">★</span> <span id="skill-modal-stars"></span></span>
+          <span class="dot">·</span>
+          <span>使用 <span id="skill-modal-uses"></span></span>
+        </div>
+      </div>
+    </div>
+
+    <p class="skill-modal-desc" id="skill-modal-desc"></p>
+
+    <div class="skill-modal-section">
+      <div class="skill-modal-label">能力标签</div>
+      <div class="skill-modal-tags" id="skill-modal-tags"></div>
+    </div>
+
+    <div class="skill-modal-section">
+      <div class="skill-modal-label">自动生成的 Prompt（可参考）</div>
+      <p class="skill-modal-prompt" id="skill-modal-prompt"></p>
+    </div>
+
+    <div class="skill-modal-foot">
+      <button class="btn ghost" data-modal-close>关闭</button>
+      <button class="btn primary" id="skill-modal-try">
+        <span>立即试用</span>
+        <span class="arr">→</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ░░ Skill Chat Modal (separate dialog opened by 立即试用) ░░ -->
+<div class="modal" id="chat-modal" aria-hidden="true" role="dialog" aria-labelledby="chat-modal-title">
+  <div class="modal-mask" data-modal-close></div>
+  <div class="modal-panel chat-modal-panel">
+    <button class="modal-close" data-modal-close aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M6 6l12 12M18 6L6 18"/>
+      </svg>
+    </button>
+
+    <header class="chat-modal-head">
+      <div class="chat-modal-icon" id="chat-modal-icon"></div>
+      <div>
+        <h3 id="chat-modal-title">对话</h3>
+        <div class="chat-modal-sub" id="chat-modal-sub"></div>
+      </div>
+    </header>
+
+    <div class="chat-modal-body" id="chat-modal-body">
+      <!-- Messages render here. Empty by default — no prior history carries over. -->
+    </div>
+
+    <div class="chat-modal-composer">
+      <textarea id="chat-modal-input" placeholder="输入消息…（Shift+Enter 换行，Enter 发送）" rows="2"></textarea>
+      <div class="chat-modal-foot">
+        <div class="chat-modal-tags" id="chat-modal-tags"></div>
+        <div class="chat-modal-controls">
+          <select class="chat-model" id="chat-modal-model" aria-label="选择模型">
+            <option value="gpt-4o">GPT-4o</option>
+            <option value="gpt-4o-mini">GPT-4o mini</option>
+            <option value="claude-sonnet" selected>Claude Sonnet</option>
+            <option value="claude-haiku">Claude Haiku</option>
+            <option value="qwen-max">Qwen Max</option>
+            <option value="deepseek-v3">DeepSeek V3</option>
+          </select>
+          <button class="btn primary chat-send" id="chat-modal-send">
+            <span>发送</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 /* =============================================================================
  * Tab switching (智能体中心 / 技能与工具)
@@ -1276,18 +1672,30 @@ html, body {
      Colors inspired by the original reference design: pastel icon tiles
      that pop against the cream background. */
   const SKILLS = [
-    { id: 'doc',     name: '文档处理',  desc: '自动提取长文档、会议纪要、新闻报道的核心观点和关键信息，生成结构化摘要。', cat: '文档', icon: '📄', bg: '#ffe1d6', stars: 4.8, uses: '12.5K', recommend: true },
-    { id: 'info',    name: '信息检索',  desc: '基于知识库的实时检索增强生成，引用透明、来源可溯，支持中英文混合查询。',     cat: '搜索', icon: '🔍', bg: '#d6f1e2', stars: 4.8, uses: '12.5K', recommend: true },
-    { id: 'summary', name: '会议总结',  desc: '上传会议录音或文字稿，自动生成待办、决议、风险点与下一步行动。',                  cat: '办公', icon: '💡', bg: '#fff1d6', stars: 4.7, uses: '9.2K',  recommend: true },
-    { id: 'qa',      name: '智能问答',  desc: '多轮对话式问答，自动反问澄清意图，结合企业知识库给出有出处的答复。',           cat: '搜索', icon: '💬', bg: '#e9f0ff', stars: 4.9, uses: '23.1K', recommend: true },
-    { id: 'data',    name: '数据分析',  desc: '上传 CSV/Excel/数据库连接，用自然语言提问即可生成图表与洞察报告。',           cat: '数据', icon: '📊', bg: '#efe8ff', stars: 4.8, uses: '8.4K',  recommend: true },
-    { id: 'draft',   name: '邮件草稿',  desc: '根据上下文自动起草邮件、润色语气、生成多版本候选。',                              cat: '办公', icon: '✏️', bg: '#ffe1ee', stars: 4.6, uses: '6.1K',  recommend: true },
-    { id: 'qa2',     name: '文档处理',  desc: '自动提取长文档、会议纪要、新闻报道的核心观点和关键信息，生成结构化…',           cat: '文档', icon: '🗂️', bg: '#dff0fb', stars: 4.8, uses: '12.5K', recommend: false },
-    { id: 'info2',   name: '信息检索',  desc: '基于知识库的实时检索增强生成，引用透明、来源可溯，支持中英文混合查询…',         cat: '搜索', icon: '🛡️', bg: '#d6f1e2', stars: 4.8, uses: '12.5K', recommend: false },
-    { id: 'draft2',  name: '文本润色',  desc: '对中英文长文进行风格、语气、可读性润色，保留原意的同时提升表达力。',           cat: '内容', icon: '✨', bg: '#fff1d6', stars: 4.7, uses: '7.8K',  recommend: false },
-    { id: 'trans',   name: '多语翻译',  desc: '支持 100+ 语种互译，保留原文格式、术语一致性与上下文语气。',                      cat: '内容', icon: '🌐', bg: '#e9f0ff', stars: 4.9, uses: '15.2K', recommend: false },
-    { id: 'code',    name: '代码助手',  desc: '代码生成、重构、解释、单元测试与 Bug 定位，覆盖 30+ 主流语言。',               cat: '开发', icon: '⌨️', bg: '#efe8ff', stars: 4.9, uses: '20.4K', recommend: false },
-    { id: 'img',     name: '图像理解',  desc: '对截图、设计稿、表格图片进行结构化解析与文字提取。',                              cat: '视觉', icon: '🖼️', bg: '#ffe1ee', stars: 4.6, uses: '5.7K',  recommend: false }
+    { id: 'doc',     name: '文档处理',  desc: '自动提取长文档、会议纪要、新闻报道的核心观点和关键信息，生成结构化摘要。', cat: '文档', icon: '📄', bg: '#ffe1d6', stars: 4.8, uses: '12.5K', recommend: true,
+      tags: ['长文档', '摘要', '结构化'], prompt: '请阅读我粘贴的长文档，提取核心观点、关键数据和结论，输出一份结构化摘要（要点列表 + 200 字概述）。' },
+    { id: 'info',    name: '信息检索',  desc: '基于知识库的实时检索增强生成，引用透明、来源可溯，支持中英文混合查询。',     cat: '搜索', icon: '🔍', bg: '#d6f1e2', stars: 4.8, uses: '12.5K', recommend: true,
+      tags: ['检索增强', '引用', '知识库'], prompt: '基于企业知识库回答我接下来提出的问题，每个事实附带来源标注（文档名 + 页码）。' },
+    { id: 'summary', name: '会议总结',  desc: '上传会议录音或文字稿，自动生成待办、决议、风险点与下一步行动。',                  cat: '办公', icon: '💡', bg: '#fff1d6', stars: 4.7, uses: '9.2K',  recommend: true,
+      tags: ['会议', '待办', '决议'], prompt: '我将提供一段会议记录，请整理出：会议主题、关键决议、待办事项（含负责人与截止日期）、风险点与下一步行动。' },
+    { id: 'qa',      name: '智能问答',  desc: '多轮对话式问答，自动反问澄清意图，结合企业知识库给出有出处的答复。',           cat: '搜索', icon: '💬', bg: '#e9f0ff', stars: 4.9, uses: '23.1K', recommend: true,
+      tags: ['多轮对话', '澄清', '知识库'], prompt: '进入多轮问答模式。问题模糊时主动反问澄清，结合企业知识库给出有出处的答复，答案结尾标注信息来源。' },
+    { id: 'data',    name: '数据分析',  desc: '上传 CSV/Excel/数据库连接，用自然语言提问即可生成图表与洞察报告。',           cat: '数据', icon: '📊', bg: '#efe8ff', stars: 4.8, uses: '8.4K',  recommend: true,
+      tags: ['数据', '图表', '洞察'], prompt: '我将提供 CSV/Excel/自然语言描述。请先用自然语言总结主要洞察，必要时给出可执行的图表/统计建议。' },
+    { id: 'draft',   name: '邮件草稿',  desc: '根据上下文自动起草邮件、润色语气、生成多版本候选。',                              cat: '办公', icon: '✏️', bg: '#ffe1ee', stars: 4.6, uses: '6.1K',  recommend: true,
+      tags: ['邮件', '润色', '多版本'], prompt: '我将描述邮件目的、收件人与期望语气。请输出 2-3 个不同语气版本（正式 / 半正式 / 直接），并解释各自适用场景。' },
+    { id: 'qa2',     name: '文档处理',  desc: '自动提取长文档、会议纪要、新闻报道的核心观点和关键信息，生成结构化…',           cat: '文档', icon: '🗂️', bg: '#dff0fb', stars: 4.8, uses: '12.5K', recommend: false,
+      tags: ['长文档', '摘要', '对比'], prompt: '请比较两份长文档的差异点，输出对比表格（差异类型 / 文档A / 文档B / 影响），并给出总结性观点。' },
+    { id: 'info2',   name: '信息检索',  desc: '基于知识库的实时检索增强生成，引用透明、来源可溯，支持中英文混合查询…',         cat: '搜索', icon: '🛡️', bg: '#d6f1e2', stars: 4.8, uses: '12.5K', recommend: false,
+      tags: ['检索', '引用', '溯源'], prompt: '请基于内部知识库回答问题。每条结论必须附带可点击的引用，至少标注文档名与段落位置。' },
+    { id: 'draft2',  name: '文本润色',  desc: '对中英文长文进行风格、语气、可读性润色，保留原意的同时提升表达力。',           cat: '内容', icon: '✨', bg: '#fff1d6', stars: 4.7, uses: '7.8K',  recommend: false,
+      tags: ['润色', '风格', '可读性'], prompt: '我将贴一段文字。请先指出其中三处最影响可读性的问题，再给出润色后的版本，保留原意。' },
+    { id: 'trans',   name: '多语翻译',  desc: '支持 100+ 语种互译，保留原文格式、术语一致性与上下文语气。',                      cat: '内容', icon: '🌐', bg: '#e9f0ff', stars: 4.9, uses: '15.2K', recommend: false,
+      tags: ['翻译', '术语', '上下文'], prompt: '我将贴一段文字与目标语言。请翻译并保持原文格式；术语使用我指定的对照表（无对照表时自动推断并在末尾列出）。' },
+    { id: 'code',    name: '代码助手',  desc: '代码生成、重构、解释、单元测试与 Bug 定位，覆盖 30+ 主流语言。',               cat: '开发', icon: '⌨️', bg: '#efe8ff', stars: 4.9, uses: '20.4K', recommend: false,
+      tags: ['代码生成', '重构', '单测'], prompt: '我将描述需求或贴一段代码。请生成/重构/补全，并附简短说明与必要的单元测试用例。' },
+    { id: 'img',     name: '图像理解',  desc: '对截图、设计稿、表格图片进行结构化解析与文字提取。',                              cat: '视觉', icon: '🖼️', bg: '#ffe1ee', stars: 4.6, uses: '5.7K',  recommend: false,
+      tags: ['OCR', '设计稿', '表格'], prompt: '我将提供一张图片（截图 / 设计稿 / 表格）。请先描述所见内容，再结构化提取其中的文字与数据。' }
   ];
 
   /* ---- Persisted favourites (localStorage) ---- */
@@ -1419,6 +1827,185 @@ html, body {
 
   /* Initial render */
   render();
+
+  /* =====================================================================
+   * Skill Detail Modal — click a skill card to open it
+   * ===================================================================== */
+  const skillModal = document.getElementById('skill-modal');
+  const sm = {
+    root:    skillModal,
+    icon:    document.getElementById('skill-modal-icon'),
+    title:   document.getElementById('skill-modal-title'),
+    cat:     document.getElementById('skill-modal-cat'),
+    stars:   document.getElementById('skill-modal-stars'),
+    uses:    document.getElementById('skill-modal-uses'),
+    desc:    document.getElementById('skill-modal-desc'),
+    tags:    document.getElementById('skill-modal-tags'),
+    prompt:  document.getElementById('skill-modal-prompt'),
+    tryBtn:  document.getElementById('skill-modal-try'),
+    current: null
+  };
+  function openSkillModal(skill) {
+    sm.current = skill;
+    sm.icon.textContent = skill.icon;
+    sm.icon.style.background = skill.bg;
+    sm.title.textContent = skill.name;
+    sm.cat.textContent = skill.cat;
+    sm.stars.textContent = skill.stars;
+    sm.uses.textContent = skill.uses;
+    sm.desc.textContent = skill.desc;
+    sm.tags.innerHTML = (skill.tags || [])
+      .map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+    sm.prompt.textContent = skill.prompt || '';
+    sm.root.classList.add('is-open');
+    sm.root.setAttribute('aria-hidden', 'false');
+  }
+  function closeSkillModal() {
+    sm.root.classList.remove('is-open');
+    sm.root.setAttribute('aria-hidden', 'true');
+    sm.current = null;
+  }
+
+  /* Make the whole card clickable, but ignore clicks on the inner action
+     buttons (favorite/download) so they keep their own handlers. */
+  grid.addEventListener('click', e => {
+    if (e.target.closest('.js-fav') || e.target.closest('.js-dl')) return;
+    const card = e.target.closest('.skill-card');
+    if (!card) return;
+    const skill = SKILLS.find(s => s.id === card.dataset.id);
+    if (skill) openSkillModal(skill);
+  });
+
+  /* Click on 立即试用 → close detail modal, open chat modal pre-filled */
+  sm.tryBtn.addEventListener('click', () => {
+    const skill = sm.current;
+    closeSkillModal();
+    if (skill) openChatModal(skill);
+  });
+
+  /* =====================================================================
+   * Chat Modal — opens with default prompt seeded from the skill
+   * Closes cleanly every time → next "立即试用" re-seeds fresh state.
+   * ===================================================================== */
+  const chatModal = document.getElementById('chat-modal');
+  const cm = {
+    root:    chatModal,
+    icon:    document.getElementById('chat-modal-icon'),
+    title:   document.getElementById('chat-modal-title'),
+    sub:     document.getElementById('chat-modal-sub'),
+    body:    document.getElementById('chat-modal-body'),
+    input:   document.getElementById('chat-modal-input'),
+    model:   document.getElementById('chat-modal-model'),
+    sendBtn: document.getElementById('chat-modal-send'),
+    tagsBox: document.getElementById('chat-modal-tags'),
+    current: null
+  };
+
+  function openChatModal(skill) {
+    cm.current = skill;
+    /* Header */
+    cm.icon.textContent = skill.icon;
+    cm.icon.style.background = skill.bg;
+    cm.title.textContent = `与「${skill.name}」对话`;
+    cm.sub.textContent = skill.cat;
+    /* Tags — clicking inserts the tag into the input */
+    cm.tagsBox.innerHTML = (skill.tags || [])
+      .map(t => `<button type="button" class="tag" data-tag="${escapeHtml(t)}">#${escapeHtml(t)}</button>`)
+      .join('');
+    /* Pre-fill input with the auto-generated prompt — user can edit freely */
+    cm.input.value = skill.prompt || '';
+    /* Reset body */
+    cm.body.innerHTML = `<div class="chat-msg empty">会话已开始，发送第一条消息吧。</div>`;
+    /* Reset model to default */
+    cm.model.value = 'claude-sonnet';
+    cm.root.classList.add('is-open');
+    cm.root.setAttribute('aria-hidden', 'false');
+    /* Autofocus + cursor at end so user can immediately edit */
+    setTimeout(() => {
+      cm.input.focus();
+      const v = cm.input.value;
+      cm.input.setSelectionRange(v.length, v.length);
+      autoResize(cm.input);
+    }, 50);
+  }
+  function closeChatModal() {
+    cm.root.classList.remove('is-open');
+    cm.root.setAttribute('aria-hidden', 'true');
+    /* CRITICAL: wipe all skill-bound state so the next 立即试用 starts fresh.
+       No prior messages, no leftover prompt, no leftover skill. */
+    cm.current = null;
+    cm.body.innerHTML = '';
+    cm.input.value = '';
+    cm.tagsBox.innerHTML = '';
+  }
+
+  /* Tag button → append tag to input (with leading space if needed) */
+  cm.tagsBox.addEventListener('click', e => {
+    const t = e.target.closest('.tag');
+    if (!t) return;
+    const tag = t.dataset.tag || t.textContent.replace(/^#/, '');
+    const cur = cm.input.value.trimEnd();
+    cm.input.value = (cur ? cur + ' ' : '') + '#' + tag;
+    cm.input.focus();
+    autoResize(cm.input);
+  });
+
+  /* Auto-grow textarea */
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 200) + 'px';
+  }
+  cm.input.addEventListener('input', () => autoResize(cm.input));
+  cm.input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  });
+  cm.sendBtn.addEventListener('click', handleSend);
+
+  function handleSend() {
+    const text = cm.input.value.trim();
+    if (!text) return;
+    /* Remove placeholder empty state if present */
+    const empty = cm.body.querySelector('.chat-msg.empty');
+    if (empty) empty.remove();
+    /* Append user bubble */
+    appendMessage('user', text);
+    cm.input.value = '';
+    autoResize(cm.input);
+    cm.sendBtn.disabled = true;
+    /* Simulated assistant echo — replace with real API call later */
+    setTimeout(() => {
+      const skillName = cm.current ? cm.current.name : '技能';
+      appendMessage('assistant',
+        `已使用 ${cm.model.value} 处理你的请求（${escapeHtml(skillName)}）。\n` +
+        `这是一段示例回复：实际接入后此处会显示模型真实输出。`);
+      cm.sendBtn.disabled = false;
+    }, 600);
+  }
+  function appendMessage(role, text) {
+    const div = document.createElement('div');
+    div.className = 'chat-msg ' + role;
+    div.textContent = text;
+    cm.body.appendChild(div);
+    cm.body.scrollTop = cm.body.scrollHeight;
+  }
+
+  /* Generic modal close (works for both) */
+  document.querySelectorAll('[data-modal-close]').forEach(el => {
+    el.addEventListener('click', () => {
+      closeSkillModal();
+      closeChatModal();
+    });
+  });
+  /* ESC closes any open modal */
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      if (cm.root.classList.contains('is-open')) closeChatModal();
+      else if (sm.root.classList.contains('is-open')) closeSkillModal();
+    }
+  });
 })();
 </script>
 
