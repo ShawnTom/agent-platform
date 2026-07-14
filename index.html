@@ -1599,9 +1599,9 @@ html, body {
   <!-- Filter row: tabs + sort -->
   <div class="skills-toolbar">
     <div class="skills-tabs" role="tablist">
-      <button class="skills-tab active" data-filter="recommend">推荐技能</button>
-      <button class="skills-tab"        data-filter="all">全部技能</button>
-      <button class="skills-tab"        data-filter="favorites">我收藏的</button>
+      <button class="skills-tab active" data-filter="all">全部技能</button>
+      <button class="skills-tab"        data-filter="builtin">内置技能</button>
+      <button class="skills-tab"        data-filter="favorites">我的收藏</button>
     </div>
     <div class="skills-controls">
       <button class="ctrl-btn" id="skills-category">
@@ -1818,7 +1818,7 @@ html, body {
   const dlCount = {};
 
   /* ---- State ---- */
-  let filter = 'recommend';
+  let filter = 'all';
   let query  = '';
 
   /* ---- Render ---- */
