@@ -865,13 +865,16 @@ html, body {
   -webkit-box-orient: vertical;
 }
 
-/* Card actions (hover-only: star + download) */
+/* Card actions: hidden by default, shown on hover.
+   Once a skill is favorited, the entire action group stays visible so the
+   user can always see the bookmark state at a glance. */
 .skill-actions {
   display: flex; gap: 6px;
   opacity: 0;
   transition: opacity .15s ease;
 }
-.skill-card:hover .skill-actions { opacity: 1; }
+.skill-card:hover .skill-actions,
+.skill-card.has-fav .skill-actions { opacity: 1; }
 .icon-btn {
   width: 30px; height: 30px;
   border: 1px solid var(--rule);
@@ -1836,15 +1839,12 @@ html, body {
     }
 
     grid.innerHTML = list.map(s => `
-      <article class="skill-card" data-id="${s.id}">
+      <article class="skill-card ${favs.has(s.id) ? 'has-fav' : ''}" data-id="${s.id}">
         <div class="skill-icon" style="background:${s.bg}">${s.icon}</div>
         <div class="skill-body">
           <div class="skill-title-row">
             <span class="skill-title">${escapeHtml(s.name)}</span>
-            <span class="skill-meta">
-              <span class="star">★</span> ${s.stars}
-              <span class="dot">·</span> 使用 ${s.uses}
-            </span>
+            <span class="skill-meta">使用 ${s.uses}</span>
           </div>
           <p class="skill-desc">${escapeHtml(s.desc)}</p>
         </div>
@@ -1877,9 +1877,17 @@ html, body {
   grid.addEventListener('click', e => {
     const favBtn = e.target.closest('.js-fav');
     if (favBtn) {
-      const id = favBtn.closest('.skill-card').dataset.id;
-      if (favs.has(id)) { favs.delete(id); favBtn.classList.remove('faved'); }
-      else              { favs.add(id);    favBtn.classList.add('faved'); }
+      const card = favBtn.closest('.skill-card');
+      const id = card.dataset.id;
+      if (favs.has(id)) {
+        favs.delete(id);
+        favBtn.classList.remove('faved');
+        card.classList.remove('has-fav');
+      } else {
+        favs.add(id);
+        favBtn.classList.add('faved');
+        card.classList.add('has-fav');
+      }
       saveFavs();
       return;
     }
