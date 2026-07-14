@@ -165,6 +165,24 @@ html, body {
   border-color: var(--ink);
   color: var(--ink);
 }
+/* Logged-in state: avatar + username inline */
+.btn.admin.is-logged-in {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 8px;
+}
+.btn.admin .admin-avatar {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 /* Ghost button — outline only, transparent background. */
 .btn.ghost {
   background: transparent;
@@ -573,6 +591,168 @@ html, body {
 }
 .modal-close:hover { background: var(--bg2); color: var(--ink); border-color: var(--rule); }
 .modal-close svg { width: 16px; height: 16px; }
+
+/* ==========================================================================
+   Admin Login Modal
+   ========================================================================== */
+.admin-login-panel {
+  width: 420px;
+  max-width: 100%;
+  padding: 32px 32px 26px;
+}
+.admin-login-head {
+  text-align: center;
+  margin-bottom: 22px;
+}
+.admin-login-mark {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  background: var(--brand-soft);
+  color: var(--brand);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.admin-login-mark svg { width: 26px; height: 26px; }
+.admin-login-head h3 {
+  font-family: 'InstrumentSans', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+.admin-login-head p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.admin-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.admin-login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.admin-login-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink2);
+}
+.admin-login-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--bg);
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.admin-login-input:focus-within {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(21, 101, 192, .12);
+}
+.admin-login-input svg {
+  width: 16px; height: 16px;
+  color: var(--muted);
+  flex: 0 0 auto;
+}
+.admin-login-input input {
+  flex: 1 1 auto;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--ink);
+  padding: 0;
+  min-width: 0;
+}
+.admin-login-input input::placeholder { color: var(--muted2); }
+/* Password reveal toggle */
+.admin-login-eye {
+  border: none;
+  background: transparent;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: color .15s ease, background .15s ease;
+  flex: 0 0 auto;
+}
+.admin-login-eye:hover { color: var(--ink); background: var(--bg2); }
+.admin-login-eye svg { width: 16px; height: 16px; }
+.admin-login-eye .eye-off { display: none; }
+.admin-login-eye[aria-pressed="true"] .eye-on  { display: none; }
+.admin-login-eye[aria-pressed="true"] .eye-off { display: inline-block; }
+.admin-login-error {
+  font-size: 12.5px;
+  color: var(--accent);
+  background: rgba(220, 38, 38, 0.06);
+  border: 1px solid rgba(220, 38, 38, 0.18);
+  border-radius: 6px;
+  padding: 8px 12px;
+  line-height: 1.45;
+}
+.admin-login-error.is-success-msg {
+  color: var(--accent);
+  background: rgba(0, 166, 81, 0.08);
+  border-color: rgba(0, 166, 81, 0.22);
+}
+.admin-login-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12.5px;
+  margin-top: -2px;
+}
+.admin-login-remember {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink2);
+  cursor: pointer;
+  user-select: none;
+}
+.admin-login-remember input { accent-color: var(--brand); }
+.admin-login-forgot {
+  color: var(--brand);
+  text-decoration: none;
+  font-weight: 500;
+}
+.admin-login-forgot:hover { text-decoration: underline; }
+.admin-login-submit {
+  width: 100%;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  margin-top: 4px;
+}
+.admin-login-submit svg { width: 14px; height: 14px; }
+.admin-login-submit:disabled { opacity: .7; cursor: wait; }
+.admin-login-hint {
+  text-align: center;
+  font-size: 11.5px;
+  color: var(--muted2);
+  margin: 4px 0 0;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+/* Success state when login completes */
+.admin-login-panel.is-success .admin-login-head .admin-login-mark {
+  background: rgba(0, 166, 81, 0.10);
+  color: var(--accent);
+}
 
 /* ---- Skill detail modal ---- */
 .skill-modal-panel {
@@ -1230,7 +1410,7 @@ html, body {
     <a href="#skills"      class="nav-tab"        data-tab="skills">技能与工具</a>
   </nav>
   <div class="top-actions">
-    <a class="btn admin" href="#">管理员登录</a>
+    <button class="btn admin" id="admin-login-btn" type="button">管理员登录</button>
   </div>
 </header>
 
@@ -1820,6 +2000,79 @@ html, body {
   </div>
 </div>
 
+<!-- ░░ Admin Login Modal ░░ -->
+<div class="modal" id="admin-login-modal" aria-hidden="true" role="dialog" aria-labelledby="admin-login-title">
+  <div class="modal-mask" data-modal-close></div>
+  <div class="modal-panel admin-login-panel">
+    <button class="modal-close" data-modal-close aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M6 6l12 12M18 6L6 18"/>
+      </svg>
+    </button>
+
+    <header class="admin-login-head">
+      <div class="admin-login-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/>
+          <path d="M9 12l2 2 4-4"/>
+        </svg>
+      </div>
+      <h3 id="admin-login-title">管理员登录</h3>
+      <p>使用管理员账号登录后台管理控制台。</p>
+    </header>
+
+    <form class="admin-login-form" id="admin-login-form" autocomplete="on" novalidate>
+      <label class="admin-login-field">
+        <span class="admin-login-label">账号</span>
+        <div class="admin-login-input">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/>
+          </svg>
+          <input type="text" name="username" id="admin-login-username" autocomplete="username" placeholder="请输入管理员账号" required>
+        </div>
+      </label>
+
+      <label class="admin-login-field">
+        <span class="admin-login-label">密码</span>
+        <div class="admin-login-input">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+          </svg>
+          <input type="password" name="password" id="admin-login-password" autocomplete="current-password" placeholder="请输入密码" required>
+          <button type="button" class="admin-login-eye" id="admin-login-eye" aria-label="显示密码" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="eye-on" aria-hidden="true">
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="eye-off" aria-hidden="true">
+              <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-6.5 0-10-7-10-7a18.5 18.5 0 0 1 4.06-5.06M9.9 4.24A10.94 10.94 0 0 1 12 4c6.5 0 10 7 10 7a18.5 18.5 0 0 1-2.16 3.19M1 1l22 22"/>
+              <path d="M14.12 14.12A3 3 0 1 1 9.88 9.88"/>
+            </svg>
+          </button>
+        </div>
+      </label>
+
+      <div class="admin-login-error" id="admin-login-error" hidden></div>
+
+      <div class="admin-login-foot">
+        <label class="admin-login-remember">
+          <input type="checkbox" id="admin-login-remember" checked>
+          <span>记住账号</span>
+        </label>
+        <a href="#" class="admin-login-forgot">忘记密码?</a>
+      </div>
+
+      <button type="submit" class="btn primary admin-login-submit" id="admin-login-submit">
+        <span>登录</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 5l7 7-7 7"/>
+        </svg>
+      </button>
+
+      <p class="admin-login-hint">演示账号 · admin / admin123</p>
+    </form>
+  </div>
+</div>
+
 <script>
 /* =============================================================================
  * Tab switching (智能体中心 / 技能与工具)
@@ -2331,6 +2584,176 @@ html, body {
       else if (sm.root.classList.contains('is-open')) closeSkillModal();
     }
   });
+})();
+</script>
+
+<script>
+/* =============================================================================
+ * Admin Login Modal
+ *
+ * Demo credentials (front-end only, no real auth):
+ *   admin / admin123
+ *   demo  / demo
+ *
+ * On success the modal animates out and the "管理员登录" button switches to
+ * the user's name. The session is kept in localStorage so the state survives
+ * a reload.
+ * ============================================================================= */
+(function () {
+  const loginModal   = document.getElementById('admin-login-modal');
+  const loginBtn     = document.getElementById('admin-login-btn');
+  const loginForm    = document.getElementById('admin-login-form');
+  const userInput    = document.getElementById('admin-login-username');
+  const passInput    = document.getElementById('admin-login-password');
+  const rememberChk  = document.getElementById('admin-login-remember');
+  const eyeBtn       = document.getElementById('admin-login-eye');
+  const errorBox     = document.getElementById('admin-login-error');
+  const submitBtn    = document.getElementById('admin-login-submit');
+
+  if (!loginModal || !loginBtn) return;
+
+  /* Demo credential store. In production this would be a server endpoint. */
+  const ACCOUNTS = {
+    admin: 'admin123',
+    demo:  'demo'
+  };
+  const SESSION_KEY = 'agent-portal.admin.session';
+
+  /* ---- Session helpers ---- */
+  function getSession() {
+    try { return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); }
+    catch (e) { return null; }
+  }
+  function setSession(s) {
+    if (s) localStorage.setItem(SESSION_KEY, JSON.stringify(s));
+    else   localStorage.removeItem(SESSION_KEY);
+  }
+
+  /* Reflect logged-in state on the header button. */
+  function paintLoginButton() {
+    const s = getSession();
+    if (s && s.username) {
+      loginBtn.classList.add('is-logged-in');
+      loginBtn.innerHTML = `<span class="admin-avatar">${escapeHtml((s.username[0] || 'A').toUpperCase())}</span>${escapeHtml(s.username)}`;
+      loginBtn.setAttribute('aria-label', `已登录 · ${s.username}（点击登出）`);
+    } else {
+      loginBtn.classList.remove('is-logged-in');
+      loginBtn.textContent = '管理员登录';
+      loginBtn.setAttribute('aria-label', '管理员登录');
+    }
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
+  /* ---- Open / close ---- */
+  function openLoginModal() {
+    errorBox.hidden = true;
+    errorBox.textContent = '';
+    /* Prefill username from "remember me" if present */
+    const remembered = localStorage.getItem('agent-portal.admin.username');
+    if (remembered) userInput.value = remembered;
+    rememberChk.checked = !!remembered;
+    loginModal.classList.add('is-open');
+    loginModal.setAttribute('aria-hidden', 'false');
+    setTimeout(() => userInput.focus(), 50);
+  }
+  function closeLoginModal() {
+    loginModal.classList.remove('is-open');
+    loginModal.setAttribute('aria-hidden', 'true');
+    loginForm.reset();
+    errorBox.hidden = true;
+    /* Reset password visibility toggle */
+    eyeBtn.setAttribute('aria-pressed', 'false');
+    passInput.type = 'password';
+  }
+  function logout() {
+    setSession(null);
+    paintLoginButton();
+  }
+
+  /* ---- Events ---- */
+  loginBtn.addEventListener('click', () => {
+    const s = getSession();
+    if (s && s.username) {
+      if (confirm(`当前已登录为 “${s.username}”，是否登出?`)) logout();
+    } else {
+      openLoginModal();
+    }
+  });
+  loginModal.querySelectorAll('[data-modal-close]').forEach(el => {
+    el.addEventListener('click', closeLoginModal);
+  });
+  /* ESC closes */
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && loginModal.classList.contains('is-open')) {
+      closeLoginModal();
+    }
+  });
+  /* Submit */
+  loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const username = userInput.value.trim();
+    const password = passInput.value;
+    if (!username || !password) {
+      showError('请输入账号和密码。');
+      return;
+    }
+    /* Mimic server round-trip */
+    submitBtn.disabled = true;
+    const originalText = submitBtn.querySelector('span').textContent;
+    submitBtn.querySelector('span').textContent = '登录中…';
+    setTimeout(() => {
+      submitBtn.disabled = false;
+      submitBtn.querySelector('span').textContent = originalText;
+      const expected = ACCOUNTS[username];
+      if (expected && expected === password) {
+        /* Persist session */
+        const session = { username, loggedInAt: Date.now() };
+        setSession(session);
+        if (rememberChk.checked) {
+          localStorage.setItem('agent-portal.admin.username', username);
+        } else {
+          localStorage.removeItem('agent-portal.admin.username');
+        }
+        loginModal.querySelector('.admin-login-panel').classList.add('is-success');
+        showSuccess(`欢迎，${username}！`);
+        setTimeout(() => {
+          closeLoginModal();
+          paintLoginButton();
+          loginModal.querySelector('.admin-login-panel').classList.remove('is-success');
+        }, 700);
+      } else {
+        showError('账号或密码错误，请重试。');
+      }
+    }, 350);
+  });
+  /* Password reveal toggle */
+  eyeBtn.addEventListener('click', () => {
+    const showing = eyeBtn.getAttribute('aria-pressed') === 'true';
+    const next = !showing;
+    eyeBtn.setAttribute('aria-pressed', String(next));
+    eyeBtn.setAttribute('aria-label', next ? '隐藏密码' : '显示密码');
+    passInput.type = next ? 'text' : 'password';
+  });
+
+  /* ---- Inline error / success message helpers ---- */
+  function showError(msg) {
+    errorBox.hidden = false;
+    errorBox.textContent = msg;
+    errorBox.classList.remove('is-success-msg');
+  }
+  function showSuccess(msg) {
+    errorBox.hidden = false;
+    errorBox.textContent = msg;
+    errorBox.classList.add('is-success-msg');
+  }
+
+  /* Initial paint from stored session */
+  paintLoginButton();
 })();
 </script>
 
