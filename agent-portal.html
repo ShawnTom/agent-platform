@@ -716,17 +716,11 @@ html, body {
   border-color: var(--brand);
   box-shadow: 0 0 0 3px rgba(21, 101, 192, .12);
 }
-/* First row: read-only skill tag sits on the LEFT, editable textarea
-   starts right next to it. They share one line, baseline-aligned. */
-.chat-input-line {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-}
+/* Skill tag — sits in the bottom row alongside the model tag. */
 .chat-input-tag {
   flex: 0 0 auto;
-  height: 26px;
-  padding: 0 9px;
+  height: 30px;
+  padding: 0 10px;
   background: var(--brand-soft);
   color: var(--brand-ink);
   /* Unified 8px radius for both the skill tag and the model tag. */
@@ -740,16 +734,12 @@ html, body {
   font-weight: 600;
   display: inline-flex;
   align-items: center;
-  /* Sit on the first text baseline of the textarea */
-  margin-top: 2px;
 }
 /* The textarea — borderless, transparent; height grows with content.
-   Capped at 250px via JS (autoResize) so the textarea itself scrolls
-   beyond that. Sits to the right of the read-only skill tag. */
+   Capped at 200px via JS (autoResize) so the textarea itself scrolls
+   beyond that. Now sits alone in its own row above the toolbar. */
 #chat-modal-input {
-  flex: 1 1 auto;
   width: 100%;
-  min-width: 0;
   resize: none;
   border: none;
   background: transparent;
@@ -765,24 +755,25 @@ html, body {
   overflow-y: auto;
 }
 /* Toolbar inside the shell: model tag (left) + send button (right) */
+/* Bottom row: skill tag + model tag sit on the LEFT, send button pinned RIGHT. */
 .chat-input-toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
   padding-top: 4px;
   border-top: 1px solid var(--rule-soft);
 }
-.chat-input-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.chat-input-toolbar .chat-send { margin-left: auto; }
 /* Model picker — tag-style with a caret.
    Matches the skill tag's pill shape but uses a different colour
    (neutral grey instead of brand blue) so they stay distinguishable. */
 .chat-model-tag {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  height: 26px;
-  padding: 0 8px;
+  /* 8px between the model text and the caret icon — fixed by spec. */
+  gap: 8px;
+  height: 30px;
+  padding: 0 10px;
   background: var(--bg2);
   color: var(--ink);
   border-radius: 8px;
@@ -810,8 +801,8 @@ html, body {
   height: 100%;
 }
 .chat-model-caret {
-  width: 11px;
-  height: 11px;
+  width: 20px;
+  height: 20px;
   color: var(--muted);
   flex: 0 0 auto;
   pointer-events: none;
@@ -1701,14 +1692,12 @@ html, body {
     <div class="chat-modal-composer">
       <!-- One rounded input shell containing: tag (left) + textarea (right) + toolbar -->
       <div class="chat-input-shell">
-        <!-- First row: read-only skill tag + editable textarea in one line -->
-        <div class="chat-input-line">
-          <span class="chat-input-tag" id="chat-modal-tags"></span>
-          <textarea id="chat-modal-input" placeholder="输入消息…（Shift+Enter 换行，Enter 发送）" rows="1"></textarea>
-        </div>
+        <!-- First row: editable textarea only -->
+        <textarea id="chat-modal-input" class="chat-input-textarea" placeholder="输入消息…（Shift+Enter 换行，Enter 发送）" rows="1"></textarea>
 
-        <!-- Bottom toolbar: model picker (left, tag-style) + send button (right) -->
+        <!-- Bottom row: skill tag + model tag (left), send button (right) -->
         <div class="chat-input-toolbar">
+          <span class="chat-input-tag" id="chat-modal-tags"></span>
           <label class="chat-model-tag" for="chat-modal-model">
             <select id="chat-modal-model" aria-label="选择模型">
               <optgroup label="千问（主）">
