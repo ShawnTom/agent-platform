@@ -701,54 +701,43 @@ html, body {
   padding: 12px 14px 8px;
   display: flex;
   flex-direction: column;
-  /* 8px gap between the tag row and the textarea — fixed by spec. */
+  /* 8px gap between the input row and the toolbar below. */
   gap: 8px;
-  /* Cap the input shell at 300px; if the textarea grows beyond that,
-     the shell scrolls internally. */
-  max-height: 300px;
-  overflow-y: auto;
   transition: border-color .15s ease, box-shadow .15s ease;
 }
 .chat-input-shell:focus-within {
   border-color: var(--brand);
   box-shadow: 0 0 0 3px rgba(21, 101, 192, .12);
 }
-/* Top of shell: tag chips + prompt description (single horizontal flow) */
-.chat-input-preview {
+/* First row: read-only skill tag sits on the LEFT, editable textarea
+   starts right next to it. They share one line, baseline-aligned. */
+.chat-input-line {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  min-width: 0;
-  font-size: 13px;
-  color: var(--ink2);
-  line-height: 1.55;
+  align-items: flex-start;
+  gap: 8px;
 }
-.chat-input-preview .tag {
+.chat-input-tag {
+  flex: 0 0 auto;
   font-size: 11px;
-  padding: 3px 9px;
+  padding: 5px 9px;
   background: var(--brand-soft);
   color: var(--brand-ink);
   border-radius: 999px;
-  border: none;
   /* Read-only label, not a button */
   cursor: default;
   user-select: none;
   -webkit-user-select: none;
-  flex: 0 0 auto;
-}
-.chat-input-preview .preview-text {
-  flex: 1 1 auto;
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: var(--muted);
+  line-height: 1.2;
+  /* Sit on the first text baseline of the textarea */
+  margin-top: 4px;
 }
 /* The textarea — borderless, transparent; height follows content.
-   Outer shell caps total height at 300px and scrolls internally. */
+   Capped at 250px; longer input scrolls inside. Sits to the right of the
+   read-only skill tag and takes all remaining width. */
 #chat-modal-input {
+  flex: 1 1 auto;
   width: 100%;
+  min-width: 0;
   resize: none;
   border: none;
   background: transparent;
@@ -761,8 +750,6 @@ html, body {
   min-height: 28px;
   /* Cap the textarea at 250px; longer input scrolls inside. */
   max-height: 250px;
-  /* Scrollbar lives on the shell, not the textarea — so the input box
-     itself never shows its own scrollbar. */
   overflow-y: auto;
 }
 /* Toolbar inside the shell: model (left) + send (right) */
@@ -1678,13 +1665,13 @@ html, body {
     </div>
 
     <div class="chat-modal-composer">
-      <!-- One rounded input shell containing: tags + prompt preview + textarea -->
+      <!-- One rounded input shell containing: tag (left) + textarea (right) + toolbar -->
       <div class="chat-input-shell">
-        <!-- Tag chips + prompt description, sit at the top of the shell -->
-        <div class="chat-input-preview" id="chat-modal-tags"></div>
-
-        <!-- The editable textarea (auto-resizing) -->
-        <textarea id="chat-modal-input" placeholder="输入消息…（Shift+Enter 换行，Enter 发送）" rows="1"></textarea>
+        <!-- First row: read-only skill tag + editable textarea in one line -->
+        <div class="chat-input-line">
+          <span class="chat-input-tag" id="chat-modal-tags"></span>
+          <textarea id="chat-modal-input" placeholder="输入消息…（Shift+Enter 换行，Enter 发送）" rows="1"></textarea>
+        </div>
 
         <!-- Bottom toolbar: model picker (left) + send button (right) -->
         <div class="chat-input-toolbar">
@@ -1992,9 +1979,9 @@ html, body {
     cm.title.textContent = skill.name;
     cm.sub.textContent = skill.prompt || skill.desc;
     /* Inside the input shell: a single read-only tag showing the skill name.
-       This is a placeholder prefix framing the conversation — not editable,
-       not clickable. Below it sits the editable textarea. */
-    cm.tagsBox.innerHTML = `<span class="tag">${escapeHtml(skill.name)}</span>`;
+       Sits at the LEFT of the first input row; textarea starts to its right.
+       Not editable, not clickable. */
+    cm.tagsBox.textContent = skill.name;
     /* Pre-fill input with the auto-generated prompt — user can edit freely */
     cm.input.value = skill.prompt || '';
     /* Reset body */
@@ -2022,8 +2009,8 @@ html, body {
     cm.tagsBox.innerHTML = '';
   }
 
-  /* The preview row above the textarea is read-only — no click handler needed.
-     A click anywhere on the preview just focuses the textarea. */
+  /* The skill tag is a read-only label. Clicking it just focuses the
+     textarea (cursor goes to the end of existing input). */
   cm.tagsBox.addEventListener('click', () => {
     cm.input.focus();
     const v = cm.input.value;
