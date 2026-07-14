@@ -1979,17 +1979,10 @@ html, body {
     /* Header: skill name + the user-editable prompt description */
     cm.title.textContent = skill.name;
     cm.sub.textContent = skill.prompt || skill.desc;
-    /* Inside the input shell: read-only "title-style" placeholder prefix.
-       These chips + text are NOT editable, NOT clickable to insert anything.
-       They serve as a fixed prefix that frames how the user should respond.
-       Below them sits the editable textarea. */
-    const tagsHtml = (skill.tags || [])
-      .map(t => `<span class="tag">#${escapeHtml(t)}</span>`)
-      .join('');
-    const promptText = skill.prompt || skill.desc || '';
-    const previewText = promptText.slice(0, 60) + (promptText.length > 60 ? '…' : '');
-    cm.tagsBox.innerHTML = tagsHtml +
-      (previewText ? `<span class="preview-text">${escapeHtml(previewText)}</span>` : '');
+    /* Inside the input shell: a single read-only tag showing the skill name.
+       This is a placeholder prefix framing the conversation — not editable,
+       not clickable. Below it sits the editable textarea. */
+    cm.tagsBox.innerHTML = `<span class="tag">${escapeHtml(skill.name)}</span>`;
     /* Pre-fill input with the auto-generated prompt — user can edit freely */
     cm.input.value = skill.prompt || '';
     /* Reset body */
