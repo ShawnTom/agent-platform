@@ -2051,33 +2051,44 @@ html, body {
     sortMenu.hidden = true;
     sortBtn.setAttribute('aria-expanded', 'false');
   }
+
+  /* Button click — toggles. Use `mousedown` so we run BEFORE the document
+     outside-click listener below (which is on `click`). */
+  sortBtn.addEventListener('mousedown', e => {
+    /* Prevent the upcoming `click` on document from immediately closing
+       the menu we just opened (or re-opening the menu we just closed). */
+    e.preventDefault();
+  });
   sortBtn.addEventListener('click', e => {
-    e.stopPropagation();
     if (sortMenu.hidden) openSortMenu();
     else closeSortMenu();
   });
+
+  /* Picking an option updates the sort and re-renders. */
   sortMenu.addEventListener('click', e => {
     const item = e.target.closest('.ctrl-menu-item');
     if (!item) return;
     const next = item.dataset.sort;
     if (next && next !== sort) {
       sort = next;
-      // Update label to the chosen option's text
       sortLabel.textContent = item.textContent.trim();
-      // Update active dot
       sortMenu.querySelectorAll('.ctrl-menu-item').forEach(x =>
         x.classList.toggle('active', x === item));
     }
     closeSortMenu();
     render();
   });
-  /* Click outside closes the menu */
+
+  /* Click outside the button OR the menu closes it.
+     We explicitly skip clicks that originated on the button itself. */
   document.addEventListener('click', e => {
     if (sortMenu.hidden) return;
-    if (e.target === sortBtn || sortBtn.contains(e.target)) return;
-    if (!sortMenu.contains(e.target)) closeSortMenu();
+    if (sortBtn.contains(e.target)) return;     // button handles its own toggle
+    if (sortMenu.contains(e.target)) return;    // menu handled its own item click
+    closeSortMenu();
   });
-  /* ESC closes too */
+
+  /* ESC closes the menu too. */
   window.addEventListener('keydown', e => {
     if (e.key === 'Escape' && !sortMenu.hidden) closeSortMenu();
   });
