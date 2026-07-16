@@ -1,3 +1,14 @@
 .DS_Store
 node_modules/
 *.log
+
+# OpenClaw agent workspace files
+.openclaw/
+AGENTS.md
+SOUL.md
+IDENTITY.md
+USER.md
+TOOLS.md
+HEARTBEAT.md
+MEMORY.md
+memory/
